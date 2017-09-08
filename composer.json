@@ -6,6 +6,7 @@
         "php": ">=7.0",
         "brightzone/gremlin-php": "^3.0",
         "doctrine/common": "^2.8",
+        "jms/serializer": "^1.8",
         "symfony/class-loader": "^3.3"
     },
     "license": "MIT",
