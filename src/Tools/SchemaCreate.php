@@ -24,12 +24,13 @@ class SchemaCreate
         }
 
         $vertexes_commands = array();
-        foreach ($graph_vertexes as $label => $boolean) {
+        foreach ($graph_vertexes as $label => $vertex_properties) {
             $vertexes_commands[] = "$label = mgmt.makeVertexLabel('$label').make()";
         }
 
         $edges_commands = array();
-        foreach ($graph_edges as $label => $multiplicity) {
+        foreach ($graph_edges as $label => $edge_properties) {
+            $multiplicity = $edge_properties['multiplicity'];
             $edges_commands[] = "$label = mgmt.makeEdgeLabel('$label').multiplicity($multiplicity).make()";
         }
 
