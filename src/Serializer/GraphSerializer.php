@@ -129,7 +129,7 @@ class GraphSerializer
             }
         }
 
-        $string = implode(', ', $string_array);
+        $string = $string_array ? implode(', ', $string_array) : null;
 
         return $string;
     }

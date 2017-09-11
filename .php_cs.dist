@@ -1,0 +1,26 @@
+<?php
+
+$finder = PhpCsFixer\Finder::create()
+    ->exclude('bin')
+    ->exclude('ssl')
+    ->exclude('var')
+    ->exclude('vendor')
+    ->in('src')
+;
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+        '@PSR2' => true,
+        'align_multiline_comment' => true,
+        'linebreak_after_opening_tag' => true,
+        'no_multiline_whitespace_before_semicolons' => true,
+        'no_useless_else' => true,
+        'no_useless_return' => true,
+        'ordered_imports' => true,
+        'phpdoc_order' => true,
+        'single_line_comment_style' => true,
+        'full_opening_tag' => false
+    ])
+    ->setFinder($finder)
+;

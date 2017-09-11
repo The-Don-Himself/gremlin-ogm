@@ -11,7 +11,7 @@ class UnserializableException extends RuntimeException implements GraphException
      *
      * @param string $key
      * @param string $message
-     * @return VertexLabelsConflictException
+     * @return UnserializableException
      */
     public function __construct($key, $explanation = null) {
         $message = '';
