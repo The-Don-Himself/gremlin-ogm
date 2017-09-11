@@ -2,4 +2,6 @@
 
 namespace TheDonHimself\GremlinOGM\Exception;
 
-interface GraphException {}
+interface GraphException
+{
+}

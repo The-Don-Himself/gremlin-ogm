@@ -2,10 +2,6 @@
 
 namespace TheDonHimself\GremlinOGM\Tools;
 
-use Brightzone\GremlinDriver\Connection;
-use Brightzone\GremlinDriver\InternalException;
-use Brightzone\GremlinDriver\ServerException;
-
 class SchemaCreate
 {
     public function create(array $schema)
@@ -20,7 +16,7 @@ class SchemaCreate
             $type = $properties['type'];
             $cardinality = $properties['cardinality'];
 
-            $property_keys_commands[] = "$property_key = mgmt.makePropertyKey('$property_key').dataType(" . $type . ".class).cardinality(Cardinality." . $cardinality . ").make()";
+            $property_keys_commands[] = "$property_key = mgmt.makePropertyKey('$property_key').dataType(".$type.'.class).cardinality(Cardinality.'.$cardinality.').make()';
         }
 
         $vertexes_commands = array();
@@ -51,19 +47,19 @@ class SchemaCreate
                     $add_keys = $add_keys.'.addKey('.$add_key.')';
                 }
 
-                $index = "mgmt";
+                $index = 'mgmt';
 
-                $index = $index . ".buildIndex('$name', $class)$add_keys";
+                $index = $index.".buildIndex('$name', $class)$add_keys";
 
-                if($unique){
-                    $index = $index . ".unique()";
+                if ($unique) {
+                    $index = $index.'.unique()';
                 }
 
-                if($label_constraint){
-                    $index = $index . ".indexOnly($label)";
+                if ($label_constraint) {
+                    $index = $index.".indexOnly($label)";
                 }
 
-                $index = $index . ".buildCompositeIndex()";
+                $index = $index.'.buildCompositeIndex()';
 
                 $indexes_commands[] = $index;
             }
@@ -73,18 +69,18 @@ class SchemaCreate
 
                 $add_keys = '';
                 foreach ($keys as $add_key => $mapping) {
-                    $add_keys = $add_keys . '.addKey(' . $add_key . ', Mapping.' . $mapping . '.asParameter())';
+                    $add_keys = $add_keys.'.addKey('.$add_key.', Mapping.'.$mapping.'.asParameter())';
                 }
 
-                $index = "mgmt";
+                $index = 'mgmt';
 
-                $index = $index . ".buildIndex('$name', $class)$add_keys";
+                $index = $index.".buildIndex('$name', $class)$add_keys";
 
-                if($label_constraint){
-                    $index = $index . ".indexOnly($label)";
+                if ($label_constraint) {
+                    $index = $index.".indexOnly($label)";
                 }
 
-                $index = $index . ".buildMixedIndex(\"search\")";
+                $index = $index.'.buildMixedIndex("search")';
 
                 $indexes_commands[] = $index;
             }
@@ -94,9 +90,9 @@ class SchemaCreate
 
                 $add_keys = implode(', ', $keys);
 
-                $index = "mgmt";
+                $index = 'mgmt';
 
-                $index = $index . ".buildEdgeIndex($label, '$name', Direction." . $direction . ", Order." . $order . ", $add_keys)";
+                $index = $index.".buildEdgeIndex($label, '$name', Direction.".$direction.', Order.'.$order.", $add_keys)";
 
                 $indexes_commands[] = $index;
             }

@@ -26,7 +26,7 @@ class GeoshapeBox
             'sw_lat' => $sw_lat,
             'sw_lon' => $sw_lon,
             'ne_lat' => $ne_lat,
-            'ne_lon' => $ne_lon
+            'ne_lon' => $ne_lon,
         );
     }
 
@@ -61,5 +61,4 @@ class GeoshapeBox
     {
         return $this->ne_lon;
     }
-
 }

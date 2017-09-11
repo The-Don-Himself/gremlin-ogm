@@ -11,16 +11,16 @@ class VertexLabelsConflictException extends RuntimeException implements GraphExc
      *
      * @param string $label
      * @param string $class
+     *
      * @return VertexLabelsConflictException
      */
-    public function __construct($label, $class) {
+    public function __construct($label, $class)
+    {
         $message = '';
-        $message = $message . '========== Vertex Labels Conflict ==========' . PHP_EOL;
-        $message = $message . 'Already Found Vertex Label       : ' . $label . PHP_EOL;
-        $message = $message . 'Class                            : ' . $class . PHP_EOL;
+        $message = $message.'========== Vertex Labels Conflict =========='.PHP_EOL;
+        $message = $message.'Already Found Vertex Label       : '.$label.PHP_EOL;
+        $message = $message.'Class                            : '.$class.PHP_EOL;
 
         parent::__construct($message);
     }
-
-
 }

@@ -18,7 +18,7 @@ class GeoshapePoint
         $this->lon = $lon;
         $this->_geoshapepoint = array(
             'lat' => $lat,
-            'lon' => $lon
+            'lon' => $lon,
         );
     }
 

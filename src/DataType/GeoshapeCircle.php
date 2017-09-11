@@ -22,7 +22,7 @@ class GeoshapeCircle
         $this->_geoshapecircle = array(
             'lat' => $lat,
             'lon' => $lon,
-            'radius' => $radius
+            'radius' => $radius,
         );
     }
 

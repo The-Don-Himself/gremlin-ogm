@@ -11,18 +11,18 @@ class PopulateEdgesException extends RuntimeException implements GraphException
      *
      * @param string $class
      * @param string $message
+     *
      * @return PopulateEdgesException
      */
-    public function __construct($class, $explanation = null) {
+    public function __construct($class, $explanation = null)
+    {
         $message = '';
-        $message = $message . '========== Populate Edges Exception ==========' . PHP_EOL;
-        if($explanation){
-            $message = $message . 'Explanation                      : ' . $explanation . PHP_EOL;
+        $message = $message.'========== Populate Edges Exception =========='.PHP_EOL;
+        if ($explanation) {
+            $message = $message.'Explanation                      : '.$explanation.PHP_EOL;
         }
-        $message = $message . 'Class                            : ' . $class . PHP_EOL;
+        $message = $message.'Class                            : '.$class.PHP_EOL;
 
         parent::__construct($message);
     }
-
-
 }

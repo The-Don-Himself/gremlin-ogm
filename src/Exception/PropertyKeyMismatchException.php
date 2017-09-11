@@ -15,6 +15,7 @@ class PropertyKeyMismatchException extends RuntimeException implements GraphExce
      * @param string $new_type
      * @param string $new_cardinality
      * @param string $class
+     *
      * @return PropertyKeyMismatchException
      */
     public function __construct(
@@ -26,16 +27,14 @@ class PropertyKeyMismatchException extends RuntimeException implements GraphExce
         $class
     ) {
         $message = '';
-        $message = $message . '========== Property Key Mismatch ==========' . PHP_EOL;
-        $message = $message . 'Property Key                    : ' . $property_key_name . PHP_EOL;
-        $message = $message . 'Already Found Type              : ' . $type . PHP_EOL;
-        $message = $message . 'Already Found Cardinality       : ' . $cardinality . PHP_EOL;
-        $message = $message . 'Conflicting With Type           : ' . $new_type . PHP_EOL;
-        $message = $message . 'Conflicting With Cardinality    : ' . $new_cardinality . PHP_EOL;
-        $message = $message . 'Class                           : ' . $class . PHP_EOL;
+        $message = $message.'========== Property Key Mismatch =========='.PHP_EOL;
+        $message = $message.'Property Key                    : '.$property_key_name.PHP_EOL;
+        $message = $message.'Already Found Type              : '.$type.PHP_EOL;
+        $message = $message.'Already Found Cardinality       : '.$cardinality.PHP_EOL;
+        $message = $message.'Conflicting With Type           : '.$new_type.PHP_EOL;
+        $message = $message.'Conflicting With Cardinality    : '.$new_cardinality.PHP_EOL;
+        $message = $message.'Class                           : '.$class.PHP_EOL;
 
         parent::__construct($message);
     }
-
-
 }

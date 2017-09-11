@@ -71,8 +71,8 @@ class EdgesPopulate
                     $propertyAddFromVertexAnnotation = $annotationReader->getPropertyAnnotation($reflectionProperty, $graph_add_from_vertex_annotation);
                     $propertyAddToVertexAnnotation = $annotationReader->getPropertyAnnotation($reflectionProperty, $graph_add_to_vertex_annotation);
 
-                    if($propertyAddFromVertexAnnotation){
-                        if($graph_add_from_vertex === true){
+                    if ($propertyAddFromVertexAnnotation) {
+                        if ($graph_add_from_vertex === true) {
                             throw new PopulateEdgesException($class, 'Currently, a class can only have one @AddEdgeFromVertex annotation');
                         }
                         $graph_add_from_vertex = true;
@@ -82,8 +82,8 @@ class EdgesPopulate
                         $add_from_vertex['methodForKeyValue'] = $propertyAddFromVertexAnnotation->methodForKeyValue;
                     }
 
-                    if($propertyAddToVertexAnnotation){
-                        if($graph_add_to_vertex === true){
+                    if ($propertyAddToVertexAnnotation) {
+                        if ($graph_add_to_vertex === true) {
                             throw new PopulateEdgesException($class, 'Currently, a class can only have one @AddEdgeToVertex annotation');
                         }
                         $graph_add_to_vertex = true;
@@ -94,16 +94,16 @@ class EdgesPopulate
                     }
                 }
 
-                if(($graph_add_from_vertex === true && $graph_add_to_vertex === false) || ($graph_add_from_vertex === false && $graph_add_to_vertex === true)){
+                if (($graph_add_from_vertex === true && $graph_add_to_vertex === false) || ($graph_add_from_vertex === false && $graph_add_to_vertex === true)) {
                     throw new PopulateEdgesException($class, 'A class must have both @AddEdgeFromVertex and @AddEdgeToVertex annotations but only found one');
                 }
 
-                if($graph_add_from_vertex === true && $graph_add_to_vertex === true){
+                if ($graph_add_from_vertex === true && $graph_add_to_vertex === true) {
                     $graph_populate_edges_properties[] = array(
                         '_phpclass' => $class,
                         'label' => $label,
                         'from' => $add_from_vertex,
-                        'to' => $add_to_vertex
+                        'to' => $add_to_vertex,
                     );
                 }
             }
@@ -138,7 +138,7 @@ class EdgesPopulate
         $classes = array(
             'properties' => $graph_populate_edges_properties,
             'methods' => $graph_populate_edges_methods,
-            'embedded' => $graph_populate_edges_embedded
+            'embedded' => $graph_populate_edges_embedded,
         );
 
         return $classes;

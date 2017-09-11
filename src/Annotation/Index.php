@@ -29,7 +29,7 @@ class Index implements Annotation
     public $type;
 
     /**
-     * NOTE: Unique indexes can only be created on vertices
+     * NOTE: Unique indexes can only be created on vertices.
      *
      * @var bool
      */

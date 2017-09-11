@@ -7,9 +7,9 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
+use TheDonHimself\GremlinOGM\Exception\IndexNamesConflictException;
 use TheDonHimself\GremlinOGM\Exception\PropertyKeyMismatchException;
 use TheDonHimself\GremlinOGM\Exception\VertexLabelsConflictException;
-use TheDonHimself\GremlinOGM\Exception\IndexNamesConflictException;
 
 class SchemaCheck
 {
@@ -111,7 +111,7 @@ class SchemaCheck
                     throw new VertexLabelsConflictException($label, $class);
                 }
                 $graph_vertexes[$label] = array(
-                    '_phpclass' => $class
+                    '_phpclass' => $class,
                 );
                 $indexes = $vertexAnnotations->indexes;
                 foreach ($indexes as $index) {
@@ -160,17 +160,17 @@ class SchemaCheck
                 $multiplicity = $edgeAnnotations->multiplicity;
                 if (isset($graph_edges[$label])) {
                     $message = '';
-                    $message = $message . PHP_EOL;
-                    $message = $message . '========== NOTICE ==========' . PHP_EOL;
-                    $message = $message . 'Overwriting Edge                 : ' . $label . PHP_EOL;
-                    $message = $message . 'Class                            : ' . $class . PHP_EOL;
-                    $message = $message . '============================' . PHP_EOL;
-                    $message = $message . PHP_EOL;
+                    $message = $message.PHP_EOL;
+                    $message = $message.'========== NOTICE =========='.PHP_EOL;
+                    $message = $message.'Overwriting Edge                 : '.$label.PHP_EOL;
+                    $message = $message.'Class                            : '.$class.PHP_EOL;
+                    $message = $message.'============================'.PHP_EOL;
+                    $message = $message.PHP_EOL;
                     trigger_error($message, E_USER_NOTICE);
                 }
                 $graph_edges[$label] = array(
                     '_phpclass' => $class,
-                    'multiplicity' => $multiplicity
+                    'multiplicity' => $multiplicity,
                 );
                 $indexes = $edgeAnnotations->indexes;
                 foreach ($indexes as $index) {
