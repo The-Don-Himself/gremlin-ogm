@@ -69,7 +69,11 @@ class SchemaCreate
 
                 $add_keys = '';
                 foreach ($keys as $add_key => $mapping) {
-                    $add_keys = $add_keys.'.addKey('.$add_key.', Mapping.'.$mapping.'.asParameter())';
+                    if ($mapping === 'DEFAULT') {
+                        $add_keys = $add_keys.'.addKey('.$add_key.')';
+                    } else {
+                        $add_keys = $add_keys.'.addKey('.$add_key.', Mapping.'.$mapping.'.asParameter())';
+                    }
                 }
 
                 $index = 'mgmt';
