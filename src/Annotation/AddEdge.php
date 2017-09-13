@@ -28,7 +28,7 @@ class AddEdge implements Annotation
     public $uniquePropertyKey;
 
     /**
-     * @var string
+     * @var array
      */
-    public $methodForKeyValue = null;
+    public $methodsForKeyValue = array();
 }

@@ -79,7 +79,7 @@ class EdgesPopulate
                         $add_from_vertex = array();
                         $add_from_vertex['label'] = $propertyAddFromVertexAnnotation->targetVertex;
                         $add_from_vertex['uniquePropertyKey'] = $propertyAddFromVertexAnnotation->uniquePropertyKey;
-                        $add_from_vertex['methodForKeyValue'] = $propertyAddFromVertexAnnotation->methodForKeyValue;
+                        $add_from_vertex['methodsForKeyValue'] = $propertyAddFromVertexAnnotation->methodsForKeyValue;
                     }
 
                     if ($propertyAddToVertexAnnotation) {
@@ -90,7 +90,7 @@ class EdgesPopulate
                         $add_to_vertex = array();
                         $add_to_vertex['label'] = $propertyAddToVertexAnnotation->targetVertex;
                         $add_to_vertex['uniquePropertyKey'] = $propertyAddToVertexAnnotation->uniquePropertyKey;
-                        $add_to_vertex['methodForKeyValue'] = $propertyAddToVertexAnnotation->methodForKeyValue;
+                        $add_to_vertex['methodsForKeyValue'] = $propertyAddToVertexAnnotation->methodsForKeyValue;
                     }
                 }
 
