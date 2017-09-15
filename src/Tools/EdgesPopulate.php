@@ -7,9 +7,8 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
-use TheDonHimself\GremlinOGM\Exception\PopulateEdgesException;
-use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use TheDonHimself\GremlinOGM\Annotation as Graph;
+use TheDonHimself\GremlinOGM\Exception\PopulateEdgesException;
 
 class EdgesPopulate
 {
@@ -167,22 +166,22 @@ class EdgesPopulate
 
         $embedded_edges_array = array();
 
-        foreach ($embeddedEdgesAnnotations->value as $embeddedEdgeAnnotation){
+        foreach ($embeddedEdgesAnnotations->value as $embeddedEdgeAnnotation) {
             $array = array();
 
-            foreach ($embeddedEdgeAnnotation->value as $annotationObject){
-                if($annotationObject instanceof Graph\EmbeddedEdgeProperty){
+            foreach ($embeddedEdgeAnnotation->value as $annotationObject) {
+                if ($annotationObject instanceof Graph\EmbeddedEdgeProperty) {
                     $field = $annotationObject->field;
                     $array['field'] = $field;
 
-                    if(property_exists($class, $field) !== true){
-                        throw new PopulateEdgesException($class, 'An embedded edge class must have a field property but field name : ' . $field . ' was not found.');
+                    if (property_exists($class, $field) !== true) {
+                        throw new PopulateEdgesException($class, 'An embedded edge class must have a field property but field name : '.$field.' was not found.');
                     }
 
-                    $get_field = 'get' . ucfirst($field);
+                    $get_field = 'get'.ucfirst($field);
 
-                    if(method_exists($class, $get_field) !== true){
-                        throw new PopulateEdgesException($class, 'An embedded edge class must have a get method to retrieve embedable fields property but getMethod : ' . $get_field . ' was not found.');
+                    if (method_exists($class, $get_field) !== true) {
+                        throw new PopulateEdgesException($class, 'An embedded edge class must have a get method to retrieve embedable fields property but getMethod : '.$get_field.' was not found.');
                     }
 
                     $embed = null;
@@ -193,29 +192,29 @@ class EdgesPopulate
                     $reflectionProperty = new ReflectionProperty($class, $field);
 
                     $propertyEmbedOneAnnotation = $annotationReader->getPropertyAnnotation($reflectionProperty, $embed_one_annotation);
-                    if($propertyEmbedOneAnnotation){
+                    if ($propertyEmbedOneAnnotation) {
                         $embed = 'EmbedOne';
                     }
 
                     $propertyEmbedManyAnnotation = $annotationReader->getPropertyAnnotation($reflectionProperty, $embed_many_annotation);
-                    if($propertyEmbedManyAnnotation){
+                    if ($propertyEmbedManyAnnotation) {
                         $embed = 'EmbedMany';
                     }
 
-                    if($embed == null){
-                        throw new PopulateEdgesException($class, 'An embedded edge class field must have a doctrine annotation @EmbedOne or @EmbedMany method to retrieve a single embeddable Doc or a collection. No such annotation was found for field ' . $field);
+                    if ($embed == null) {
+                        throw new PopulateEdgesException($class, 'An embedded edge class field must have a doctrine annotation @EmbedOne or @EmbedMany method to retrieve a single embeddable Doc or a collection. No such annotation was found for field '.$field);
                     }
 
                     $array['embed'] = $embed;
                 }
-                if($annotationObject instanceof Graph\AddEdgeFromVertex){
+                if ($annotationObject instanceof Graph\AddEdgeFromVertex) {
                     $add_from_vertex = array();
                     $add_from_vertex['label'] = $annotationObject->targetVertex;
                     $add_from_vertex['uniquePropertyKey'] = $annotationObject->uniquePropertyKey;
                     $add_from_vertex['methodsForKeyValue'] = $annotationObject->methodsForKeyValue;
                     $array['from'] = $add_from_vertex;
                 }
-                if($annotationObject instanceof Graph\AddEdgeToVertex){
+                if ($annotationObject instanceof Graph\AddEdgeToVertex) {
                     $add_to_vertex = array();
                     $add_to_vertex['label'] = $annotationObject->targetVertex;
                     $add_to_vertex['uniquePropertyKey'] = $annotationObject->uniquePropertyKey;
@@ -224,7 +223,7 @@ class EdgesPopulate
                 }
             }
 
-            if (!isset($array['field']) || !isset($array['embed']) || !isset($array['from']) || !isset($array['to'])){
+            if (!isset($array['field']) || !isset($array['embed']) || !isset($array['from']) || !isset($array['to'])) {
                 throw new PopulateEdgesException($class, 'An embedded edge class must have all @EmbeddedEdgeProperty, @AddEdgeFromVertex and @AddEdgeToVertex annotations');
             }
 
@@ -233,7 +232,7 @@ class EdgesPopulate
 
         return array(
             '_phpclass' => $class,
-            'embedded_edges' => $embedded_edges_array
+            'embedded_edges' => $embedded_edges_array,
         );
     }
 
@@ -247,17 +246,17 @@ class EdgesPopulate
 
         foreach ($class_maps as $class => $class_path) {
             $propertyEdges = self::properties($class);
-            if($propertyEdges){
+            if ($propertyEdges) {
                 $graph_populate_edges_properties[] = $propertyEdges;
             }
 
             $methodEdges = self::methods($class);
-            if($methodEdges){
+            if ($methodEdges) {
                 $graph_populate_edges_methods[] = $methodEdges;
             }
 
             $embeddedEdges = self::embedded($class);
-            if($embeddedEdges){
+            if ($embeddedEdges) {
                 $graph_populate_edges_embedded[] = $embeddedEdges;
             }
         }

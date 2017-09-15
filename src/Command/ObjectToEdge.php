@@ -68,8 +68,8 @@ class ObjectToEdge
 
         $properties = $graph_serializer->toArray($object);
         $properties_string = $graph_serializer->toString($properties);
-        if($properties_string){
-            $properties_string = ', ' . $properties_string;
+        if ($properties_string) {
+            $properties_string = ', '.$properties_string;
         }
 
         $add_edge_from_vertex = "g.V().hasLabel('$from_vertex_label').has('$from_vertex_key', $from_vertex_value)";
@@ -80,6 +80,6 @@ class ObjectToEdge
         $add_edge_from_vertex = "g.V().hasLabel('$from_vertex_label').has('$from_vertex_key', $from_vertex_value).next()";
         $add_edge_to_vertex = "g.V().hasLabel('$to_vertex_label').has('$to_vertex_key', $to_vertex_value).next()";
 
-        return "$add_edge_from_vertex.addEdge('$edge_label', $add_edge_to_vertex)" . $properties_string;
+        return "$add_edge_from_vertex.addEdge('$edge_label', $add_edge_to_vertex)".$properties_string;
     }
 }
