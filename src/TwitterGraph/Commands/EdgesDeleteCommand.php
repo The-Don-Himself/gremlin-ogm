@@ -26,14 +26,31 @@ class EdgesDeleteCommand extends Command
         $configPath = $input->getOption('configPath');
 
         $options = array();
+        $vendor = array();
 
         if ($configPath) {
             $configFile = file_get_contents($configPath);
             $config = json_decode($configFile, true);
             $options = $config['options'];
+            $vendor = isset($config['vendor']) ? $config['vendor'] : array();
         }
 
         $label = $input->getOption('label');
+
+        if ($label) {
+            $gremlin_command = 'g.E().hasLabel("'.$label.'").drop().iterate();';
+        } else {
+            $gremlin_command = 'g.E().drop().iterate();';
+        }
+
+        if ($vendor) {
+            $vendor_name = $vendor['name'];
+            $graph_name = $vendor['graph'];
+
+            if ('compose' === $vendor_name) {
+                $gremlin_command = 'def graph = ConfiguredGraphFactory.open("'.$graph_name.'"); def g = graph.traversal(); '.$gremlin_command;
+            }
+        }
 
         $graph_connection = (new GraphConnection($options))->init();
 
@@ -45,49 +62,18 @@ class EdgesDeleteCommand extends Command
             return;
         }
 
-        $graph_connection->transactionStart();
+        $output->writeln('Dropping All Edges');
 
-        //  Count Number of Edges
-        $number_of_edges = 0;
         try {
-            if ($label) {
-                $result = $graph_connection->send("g.V().hasLabel('$label').count()");
-            } else {
-                $result = $graph_connection->send('g.V().count()');
-            }
-            $number_of_edges = $result[0];
-            $output->writeln('Number of Edges in Graph : '.number_format($number_of_edges));
+            $graph_connection->send($gremlin_command);
         } catch (ServerException $e) {
             $output->writeln($e->getMessage());
 
             return;
         }
 
-        if ($number_of_edges > 0) {
-            $output->writeln('Dropping All Edges');
-
-            // Drop all edges
-            if ($label) {
-                $graph_connection->send("g.V().hasLabel('$label').drop().iterate()");
-            } else {
-                $graph_connection->send('g.V().drop().iterate()');
-            }
-
-            $graph_connection->transactionStop(true);
-            $graph_connection->transactionStart();
-
-            if ($label) {
-                $result = $graph_connection->send("g.V().hasLabel('$label').count()");
-            } else {
-                $result = $graph_connection->send('g.V().count()');
-            }
-
-            $number_of_edges = $result[0];
-            $output->writeln('Number of Edges in Graph : '.number_format($number_of_edges));
-        }
-
-        $graph_connection->transactionStop(true);
-
         $graph_connection->close();
+
+        $output->writeln('All Edges Dropped Successfully!');
     }
 }

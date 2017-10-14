@@ -18,7 +18,7 @@ class VertexesDeleteCommand extends Command
             ->setName('twittergraph:vertexes:delete')
             ->setDescription('TwitterGraph Delete Vertexes')
             ->addOption('configPath', null, InputOption::VALUE_OPTIONAL, 'The Path to the JSON Configuration FIle')
-            ->addOption('label', null, InputOption::VALUE_OPTIONAL, 'The Vertexes label to be deleted');
+            ->addOption('label', null, InputOption::VALUE_OPTIONAL, 'The Vertex label to be deleted');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -26,14 +26,31 @@ class VertexesDeleteCommand extends Command
         $configPath = $input->getOption('configPath');
 
         $options = array();
+        $vendor = array();
 
         if ($configPath) {
             $configFile = file_get_contents($configPath);
             $config = json_decode($configFile, true);
             $options = $config['options'];
+            $vendor = isset($config['vendor']) ? $config['vendor'] : array();
         }
 
         $label = $input->getOption('label');
+
+        if ($label) {
+            $gremlin_command = 'g.V().hasLabel("'.$label.'").drop().iterate();';
+        } else {
+            $gremlin_command = 'g.V().drop().iterate();';
+        }
+
+        if ($vendor) {
+            $vendor_name = $vendor['name'];
+            $graph_name = $vendor['graph'];
+
+            if ('compose' === $vendor_name) {
+                $gremlin_command = 'def graph = ConfiguredGraphFactory.open("'.$graph_name.'"); def g = graph.traversal(); '.$gremlin_command;
+            }
+        }
 
         $graph_connection = (new GraphConnection($options))->init();
 
@@ -45,49 +62,18 @@ class VertexesDeleteCommand extends Command
             return;
         }
 
-        $graph_connection->transactionStart();
+        $output->writeln('Dropping All Vertexes');
 
-        //  Count Number of Vertices
-        $number_of_vertices = 0;
         try {
-            if ($label) {
-                $result = $graph_connection->send("g.V().hasLabel('$label').count()");
-            } else {
-                $result = $graph_connection->send('g.V().count()');
-            }
-            $number_of_vertices = $result[0];
-            $output->writeln('Number of Vertices in Graph : '.number_format($number_of_vertices));
+            $graph_connection->send($gremlin_command);
         } catch (ServerException $e) {
             $output->writeln($e->getMessage());
 
             return;
         }
 
-        if ($number_of_vertices > 0) {
-            $output->writeln('Dropping All Vertices');
-
-            // Drop Database by dropping all vertices which drops all edges
-            if ($label) {
-                $graph_connection->send("g.V().hasLabel('$label').drop().iterate()");
-            } else {
-                $graph_connection->send('g.V().drop().iterate()');
-            }
-
-            $graph_connection->transactionStop(true);
-            $graph_connection->transactionStart();
-
-            if ($label) {
-                $result = $graph_connection->send("g.V().hasLabel('$label').count()");
-            } else {
-                $result = $graph_connection->send('g.V().count()');
-            }
-
-            $number_of_vertices = $result[0];
-            $output->writeln('Number of Vertices in Graph : '.number_format($number_of_vertices));
-        }
-
-        $graph_connection->transactionStop(true);
-
         $graph_connection->close();
+
+        $output->writeln('All Vertexes Dropped Successfully!');
     }
 }

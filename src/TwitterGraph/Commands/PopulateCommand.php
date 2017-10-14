@@ -50,12 +50,14 @@ class PopulateCommand extends Command
 
         $options = array();
         $twitter = array();
+        $vendor = array();
 
         if ($configPath) {
             $configFile = file_get_contents($configPath);
             $config = json_decode($configFile, true);
             $options = $config['options'];
             $twitter = $config['twitter'];
+            $vendor = isset($config['vendor']) ? $config['vendor'] : array();
         }
 
         // Twitter Credentials Defaults
@@ -269,6 +271,17 @@ class PopulateCommand extends Command
             $output->writeln($e->getMessage());
 
             return;
+        }
+
+        if ($vendor) {
+            $vendor_name = $vendor['name'];
+            $graph_name = $vendor['graph'];
+
+            if ('compose' === $vendor_name) {
+                $command_string = 'def graph = ConfiguredGraphFactory.open("'.$graph_name.'"); def g = graph.traversal(); null;';
+
+                $graph_connection->send($command_string, 'session');
+            }
         }
 
         $output->writeln('Creating Vertexes...');

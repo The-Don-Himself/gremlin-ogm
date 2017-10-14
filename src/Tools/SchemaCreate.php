@@ -16,18 +16,18 @@ class SchemaCreate
             $type = $properties['type'];
             $cardinality = $properties['cardinality'];
 
-            $property_keys_commands[] = "$property_key = mgmt.makePropertyKey('$property_key').dataType(".$type.'.class).cardinality(Cardinality.'.$cardinality.').make()';
+            $property_keys_commands[] = "$property_key = mgmt.makePropertyKey('$property_key').dataType(".$type.'.class).cardinality(Cardinality.'.$cardinality.').make();';
         }
 
         $vertexes_commands = array();
         foreach ($graph_vertexes as $label => $vertex_properties) {
-            $vertexes_commands[] = "$label = mgmt.makeVertexLabel('$label').make()";
+            $vertexes_commands[] = "$label = mgmt.makeVertexLabel('$label').make();";
         }
 
         $edges_commands = array();
         foreach ($graph_edges as $label => $edge_properties) {
             $multiplicity = $edge_properties['multiplicity'];
-            $edges_commands[] = "$label = mgmt.makeEdgeLabel('$label').multiplicity($multiplicity).make()";
+            $edges_commands[] = "$label = mgmt.makeEdgeLabel('$label').multiplicity($multiplicity).make();";
         }
 
         $indexes_commands = array();
@@ -59,7 +59,7 @@ class SchemaCreate
                     $index = $index.".indexOnly($label)";
                 }
 
-                $index = $index.'.buildCompositeIndex()';
+                $index = $index.'.buildCompositeIndex();';
 
                 $indexes_commands[] = $index;
             }
@@ -84,7 +84,7 @@ class SchemaCreate
                     $index = $index.".indexOnly($label)";
                 }
 
-                $index = $index.'.buildMixedIndex("search")';
+                $index = $index.'.buildMixedIndex("search");';
 
                 $indexes_commands[] = $index;
             }
@@ -96,7 +96,7 @@ class SchemaCreate
 
                 $index = 'mgmt';
 
-                $index = $index.".buildEdgeIndex($label, '$name', Direction.".$direction.', Order.'.$order.", $add_keys)";
+                $index = $index.".buildEdgeIndex($label, '$name', Direction.".$direction.', Order.'.$order.", $add_keys);";
 
                 $indexes_commands[] = $index;
             }

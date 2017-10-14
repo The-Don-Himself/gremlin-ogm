@@ -235,9 +235,9 @@ class GraphSerializer
 
         $string = $this->toString($vertex_properties);
         if ($string) {
-            $command = "g.addV(label, '$label', $string)";
+            $command = "g.addV(label, '$label', $string);";
         } else {
-            $command = "g.addV(label, '$label')";
+            $command = "g.addV(label, '$label');";
         }
 
         return $command;
@@ -310,6 +310,6 @@ class GraphSerializer
         $add_edge_from_vertex = "g.V().hasLabel('$from_vertex_label').has('$from_vertex_key', $from_vertex_value)";
         $add_edge_to_vertex = "g.V().hasLabel('$to_vertex_label').has('$to_vertex_key', $to_vertex_value)";
 
-        return "if ($add_edge_from_vertex.hasNext() == true && $add_edge_to_vertex.hasNext() == true) { $add_edge_from_vertex.next().addEdge('$edge_label', $add_edge_to_vertex.next()$properties_string) }";
+        return "if ($add_edge_from_vertex.hasNext() == true && $add_edge_to_vertex.hasNext() == true) { $add_edge_from_vertex.next().addEdge('$edge_label', $add_edge_to_vertex.next()$properties_string) };";
     }
 }

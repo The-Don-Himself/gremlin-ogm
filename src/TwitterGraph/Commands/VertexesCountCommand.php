@@ -26,14 +26,31 @@ class VertexesCountCommand extends Command
         $configPath = $input->getOption('configPath');
 
         $options = array();
+        $vendor = array();
 
         if ($configPath) {
             $configFile = file_get_contents($configPath);
             $config = json_decode($configFile, true);
             $options = $config['options'];
+            $vendor = isset($config['vendor']) ? $config['vendor'] : array();
         }
 
         $label = $input->getOption('label');
+
+        if ($label) {
+            $gremlin_command = 'g.V().hasLabel("'.$label.'").count();';
+        } else {
+            $gremlin_command = 'g.V().count();';
+        }
+
+        if ($vendor) {
+            $vendor_name = $vendor['name'];
+            $graph_name = $vendor['graph'];
+
+            if ('compose' === $vendor_name) {
+                $gremlin_command = 'def graph = ConfiguredGraphFactory.open("'.$graph_name.'"); def g = graph.traversal(); '.$gremlin_command;
+            }
+        }
 
         $graph_connection = (new GraphConnection($options))->init();
 
@@ -45,10 +62,8 @@ class VertexesCountCommand extends Command
             return;
         }
 
-        $gremlin_command = 'g.V().count()';
-
         try {
-            $resultSet = $graph_connection->send($gremlin_command);
+            $resultSet = $graph_connection->send($gremlin_command, 'session');
             $number_of_vertexes = $resultSet[0];
             $output->writeln('Number of Vertexes In TwitterGraph : '.number_format($number_of_vertexes));
         } catch (ServerException $e) {
