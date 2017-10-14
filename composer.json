@@ -4,10 +4,14 @@
     "type": "library",
     "require": {
         "php": ">=7.0",
+        "abraham/twitteroauth": "^0.7.2",
         "brightzone/gremlin-php": "^3.0",
+        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/psr7": "^1.4.2",
         "doctrine/common": "^2.8",
-        "jms/serializer": "^1.8",
-        "symfony/class-loader": "^3.3"
+        "jms/serializer": "^1.9",
+        "symfony/class-loader": "^3.3",
+        "symfony/console": "^3.3"
     },
     "license": "MIT",
     "authors": [
@@ -28,5 +32,6 @@
             "TheDonHimself\\GremlinOGM\\": "src/"
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "bin": ["bin/graph", "bin/graph.php"]
 }

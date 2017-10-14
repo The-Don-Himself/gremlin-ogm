@@ -54,7 +54,7 @@ class EdgesPopulate
             $propertyAddToVertexAnnotation = $annotationReader->getPropertyAnnotation($reflectionProperty, $graph_add_to_vertex_annotation);
 
             if ($propertyAddFromVertexAnnotation) {
-                if ($graph_add_from_vertex === true) {
+                if (true === $graph_add_from_vertex) {
                     throw new PopulateEdgesException($class, 'Currently, a class can only have one @AddEdgeFromVertex annotation');
                 }
                 $graph_add_from_vertex = true;
@@ -64,7 +64,7 @@ class EdgesPopulate
             }
 
             if ($propertyAddToVertexAnnotation) {
-                if ($graph_add_to_vertex === true) {
+                if (true === $graph_add_to_vertex) {
                     throw new PopulateEdgesException($class, 'Currently, a class can only have one @AddEdgeToVertex annotation');
                 }
                 $graph_add_to_vertex = true;
@@ -74,11 +74,11 @@ class EdgesPopulate
             }
         }
 
-        if ($graph_add_from_vertex === false && $graph_add_to_vertex === false) {
+        if (false === $graph_add_from_vertex && false === $graph_add_to_vertex) {
             return;
         }
 
-        if (($graph_add_from_vertex === true && $graph_add_to_vertex === false) || ($graph_add_from_vertex === false && $graph_add_to_vertex === true)) {
+        if ((true === $graph_add_from_vertex && false === $graph_add_to_vertex) || (false === $graph_add_from_vertex && true === $graph_add_to_vertex)) {
             throw new PopulateEdgesException($class, 'A class must have both @AddEdgeFromVertex and @AddEdgeToVertex annotations but only found one');
         }
 
@@ -128,7 +128,7 @@ class EdgesPopulate
                 continue;
             }
 
-            if ($graph_add_to_vertex_methods === true) {
+            if (true === $graph_add_to_vertex_methods) {
                 throw new PopulateEdgesException($class, 'Currently, a class can only have one @PopulateEdges method');
             }
 
@@ -136,7 +136,7 @@ class EdgesPopulate
             $method = $method_name;
         }
 
-        if ($graph_add_to_vertex_methods !== true) {
+        if (true !== $graph_add_to_vertex_methods) {
             return;
         }
 
@@ -174,13 +174,13 @@ class EdgesPopulate
                     $field = $annotationObject->field;
                     $array['field'] = $field;
 
-                    if (property_exists($class, $field) !== true) {
+                    if (true !== property_exists($class, $field)) {
                         throw new PopulateEdgesException($class, 'An embedded edge class must have a field property but field name : '.$field.' was not found.');
                     }
 
                     $get_field = 'get'.ucfirst($field);
 
-                    if (method_exists($class, $get_field) !== true) {
+                    if (true !== method_exists($class, $get_field)) {
                         throw new PopulateEdgesException($class, 'An embedded edge class must have a get method to retrieve embedable fields property but getMethod : '.$get_field.' was not found.');
                     }
 
@@ -201,7 +201,7 @@ class EdgesPopulate
                         $embed = 'EmbedMany';
                     }
 
-                    if ($embed == null) {
+                    if (null == $embed) {
                         throw new PopulateEdgesException($class, 'An embedded edge class field must have a doctrine annotation @EmbedOne or @EmbedMany method to retrieve a single embeddable Doc or a collection. No such annotation was found for field '.$field);
                     }
 

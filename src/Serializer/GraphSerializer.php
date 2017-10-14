@@ -42,7 +42,6 @@ class GraphSerializer
 
             if (is_string($value)) {
                 $value = trim(preg_replace('/\s+/', ' ', $value));
-                //  $value = trim(preg_replace('/\s\s+/', ' ', $value));
                 $value = addslashes($value);
                 $value = "'$value'";
             }
@@ -58,7 +57,7 @@ class GraphSerializer
             }
 
             foreach ((array) $value as $value_key => $value_value) {
-                if ($value_key === '_geoshapepoint') {
+                if ('_geoshapepoint' === $value_key) {
                     $lat = isset($value_value['lat']) ? $value_value['lat'] : null;
                     $lon = isset($value_value['lon']) ? $value_value['lon'] : null;
 
@@ -73,7 +72,7 @@ class GraphSerializer
                     continue;
                 }
 
-                if ($value_key === '_geoshapecircle') {
+                if ('_geoshapecircle' === $value_key) {
                     $lat = isset($value_value['lat']) ? $value_value['lat'] : null;
                     $lon = isset($value_value['lon']) ? $value_value['lon'] : null;
                     $radius = isset($value_value['radius']) ? $value_value['radius'] : null;
@@ -88,7 +87,7 @@ class GraphSerializer
                     continue;
                 }
 
-                if ($value_key === '_geoshapebox') {
+                if ('_geoshapebox' === $value_key) {
                     $sw_lat = isset($value_value['sw_lat']) ? $value_value['sw_lat'] : null;
                     $sw_lon = isset($value_value['sw_lon']) ? $value_value['sw_lon'] : null;
                     $ne_lat = isset($value_value['ne_lat']) ? $value_value['ne_lat'] : null;
@@ -144,7 +143,6 @@ class GraphSerializer
 
             if (is_string($value)) {
                 $value = trim(preg_replace('/\s+/', ' ', $value));
-                //  $value = trim(preg_replace('/\s\s+/', ' ', $value));
                 $value = addslashes($value);
                 $value = "'$value'";
             }
@@ -159,7 +157,7 @@ class GraphSerializer
             }
 
             foreach ((array) $value as $value_key => $value_value) {
-                if ($value_key === '_geoshapepoint') {
+                if ('_geoshapepoint' === $value_key) {
                     $lat = isset($value_value['lat']) ? $value_value['lat'] : null;
                     $lon = isset($value_value['lon']) ? $value_value['lon'] : null;
 
@@ -173,7 +171,7 @@ class GraphSerializer
                     continue;
                 }
 
-                if ($value_key === '_geoshapecircle') {
+                if ('_geoshapecircle' === $value_key) {
                     $lat = isset($value_value['lat']) ? $value_value['lat'] : null;
                     $lon = isset($value_value['lon']) ? $value_value['lon'] : null;
                     $radius = isset($value_value['radius']) ? $value_value['radius'] : null;
@@ -187,7 +185,7 @@ class GraphSerializer
                     continue;
                 }
 
-                if ($value_key === '_geoshapebox') {
+                if ('_geoshapebox' === $value_key) {
                     $sw_lat = isset($value_value['sw_lat']) ? $value_value['sw_lat'] : null;
                     $sw_lon = isset($value_value['sw_lon']) ? $value_value['sw_lon'] : null;
                     $ne_lat = isset($value_value['ne_lat']) ? $value_value['ne_lat'] : null;
@@ -228,5 +226,90 @@ class GraphSerializer
         $string = $string_array ? implode('', $string_array) : null;
 
         return $string;
+    }
+
+    public function toVertex(array $array)
+    {
+        $label = key($array);
+        $vertex_properties = current($array);
+
+        $string = $this->toString($vertex_properties);
+        if ($string) {
+            $command = "g.addV(label, '$label', $string)";
+        } else {
+            $command = "g.addV(label, '$label')";
+        }
+
+        return $command;
+    }
+
+    public function toEdge(string $edge_label, array $from_vertex, array $to_vertex, $object)
+    {
+        $from_vertex_label = $from_vertex['label'];
+        $from_vertex_key = $from_vertex['uniquePropertyKey'];
+        $from_vertex_value_methods = $from_vertex['methodsForKeyValue'];
+
+        $to_vertex_label = $to_vertex['label'];
+        $to_vertex_key = $to_vertex['uniquePropertyKey'];
+        $to_vertex_value_methods = $to_vertex['methodsForKeyValue'];
+
+        $continue = false;
+
+        $from_vertex_value = $object;
+        foreach ($from_vertex_value_methods as $method) {
+            $from_vertex_value = call_user_func(array($from_vertex_value, $method));
+            if (!$from_vertex_value) {
+                $continue = true;
+                break;
+            }
+        }
+
+        if (true === $continue) {
+            return;
+        }
+
+        if (is_string($from_vertex_value)) {
+            $from_vertex_value = trim(preg_replace('/\s+/', ' ', $from_vertex_value));
+            $from_vertex_value = addslashes($from_vertex_value);
+            $from_vertex_value = "'$from_vertex_value'";
+        }
+
+        if (is_bool($from_vertex_value)) {
+            $from_vertex_value = $from_vertex_value ? 'true' : 'false';
+        }
+
+        $to_vertex_value = $object;
+        foreach ($to_vertex_value_methods as $method) {
+            $to_vertex_value = call_user_func(array($to_vertex_value, $method));
+            if (!$from_vertex_value) {
+                $continue = true;
+                break;
+            }
+        }
+
+        if (true === $continue) {
+            return;
+        }
+
+        if (is_string($to_vertex_value)) {
+            $to_vertex_value = trim(preg_replace('/\s+/', ' ', $to_vertex_value));
+            $to_vertex_value = addslashes($to_vertex_value);
+            $to_vertex_value = "'$to_vertex_value'";
+        }
+
+        if (is_bool($to_vertex_value)) {
+            $to_vertex_value = $to_vertex_value ? 'true' : 'false';
+        }
+
+        $properties = $this->toArray($object);
+        $properties_string = $this->toString($properties);
+        if ($properties_string) {
+            $properties_string = ', '.$properties_string;
+        }
+
+        $add_edge_from_vertex = "g.V().hasLabel('$from_vertex_label').has('$from_vertex_key', $from_vertex_value)";
+        $add_edge_to_vertex = "g.V().hasLabel('$to_vertex_label').has('$to_vertex_key', $to_vertex_value)";
+
+        return "if ($add_edge_from_vertex.hasNext() == true && $add_edge_to_vertex.hasNext() == true) { $add_edge_from_vertex.next().addEdge('$edge_label', $add_edge_to_vertex.next()$properties_string) }";
     }
 }

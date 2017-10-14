@@ -37,7 +37,7 @@ class SchemaCreate
             $keys = $index['keys'];
 
             $type = $index['type'];
-            if ($type == 'Composite') {
+            if ('Composite' == $type) {
                 $class = $index['class'];
                 $unique = $index['unique'];
                 $label_constraint = $index['label_constraint'];
@@ -63,13 +63,13 @@ class SchemaCreate
 
                 $indexes_commands[] = $index;
             }
-            if ($type == 'Mixed') {
+            if ('Mixed' == $type) {
                 $class = $index['class'];
                 $label_constraint = $index['label_constraint'];
 
                 $add_keys = '';
                 foreach ($keys as $add_key => $mapping) {
-                    if ($mapping === 'DEFAULT') {
+                    if ('DEFAULT' === $mapping) {
                         $add_keys = $add_keys.'.addKey('.$add_key.')';
                     } else {
                         $add_keys = $add_keys.'.addKey('.$add_key.', Mapping.'.$mapping.'.asParameter())';
@@ -88,7 +88,7 @@ class SchemaCreate
 
                 $indexes_commands[] = $index;
             }
-            if ($type == 'Vertex-centric') {
+            if ('Vertex-centric' == $type) {
                 $direction = $index['direction'];
                 $order = $index['order'];
 

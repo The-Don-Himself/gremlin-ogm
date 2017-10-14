@@ -120,7 +120,7 @@ class SchemaCheck
                     if (isset($graph_indexes[$name])) {
                         throw new IndexNamesConflictException($name, $class);
                     }
-                    if ($type == 'Composite') {
+                    if ('Composite' == $type) {
                         $graph_indexes[$name] = array(
                             'name' => $index->name,
                             'label' => $label,
@@ -131,7 +131,7 @@ class SchemaCheck
                             'keys' => $index->keys,
                         );
                     }
-                    if ($type == 'Mixed') {
+                    if ('Mixed' == $type) {
                         $graph_indexes[$name] = array(
                             'name' => $index->name,
                             'label' => $label,
@@ -141,7 +141,7 @@ class SchemaCheck
                             'keys' => $index->keys,
                         );
                     }
-                    if ($type == 'Vertex-centric') {
+                    if ('Vertex-centric' == $type) {
                         $graph_indexes[$name] = array(
                             'name' => $index->name,
                             'label' => $label,
@@ -179,7 +179,7 @@ class SchemaCheck
                     if (isset($graph_indexes[$name])) {
                         continue;
                     }
-                    if ($type == 'Composite') {
+                    if ('Composite' == $type) {
                         $graph_indexes[$name] = array(
                             'name' => $index->name,
                             'label' => $label,
@@ -190,7 +190,7 @@ class SchemaCheck
                             'keys' => $index->keys,
                         );
                     }
-                    if ($type == 'Mixed') {
+                    if ('Mixed' == $type) {
                         $graph_indexes[$name] = array(
                             'name' => $index->name,
                             'label' => $label,
@@ -200,7 +200,7 @@ class SchemaCheck
                             'keys' => $index->keys,
                         );
                     }
-                    if ($type == 'Vertex-centric') {
+                    if ('Vertex-centric' == $type) {
                         $graph_indexes[$name] = array(
                             'name' => $index->name,
                             'label' => $label,
