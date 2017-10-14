@@ -50,7 +50,7 @@ class EdgesCountCommand extends Command
         try {
             $resultSet = $graph_connection->send($gremlin_command);
             $number_of_edges = $resultSet[0];
-            $output->writeln('Number of Edge In TwitterGraph : '.number_format($number_of_edges));
+            $output->writeln('Number of Edges In TwitterGraph : '.number_format($number_of_edges));
         } catch (ServerException $e) {
             $output->writeln($e->getMessage());
 

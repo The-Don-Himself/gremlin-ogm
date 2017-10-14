@@ -201,7 +201,7 @@ class EdgesPopulate
                         $embed = 'EmbedMany';
                     }
 
-                    if (null == $embed) {
+                    if (null === $embed) {
                         throw new PopulateEdgesException($class, 'An embedded edge class field must have a doctrine annotation @EmbedOne or @EmbedMany method to retrieve a single embeddable Doc or a collection. No such annotation was found for field '.$field);
                     }
 
