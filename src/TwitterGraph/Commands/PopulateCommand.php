@@ -292,6 +292,8 @@ class PopulateCommand extends Command
             }
         }, [&$graph_connection, $vertex_commands]);
 
+        $output->writeln('Done! ' . count($vertex_commands) . ' Vertexes Created');
+
         $output->writeln('Creating Edges...');
 
         $graph_connection->transaction(function (&$graph_connection, $edge_commands) {
@@ -301,6 +303,8 @@ class PopulateCommand extends Command
         }, [&$graph_connection, $edge_commands]);
 
         $graph_connection->close();
+
+        $output->writeln('Done! ' . count($edge_commands) . ' Edges Created');
 
         $output->writeln('Graph Populated Successfully!');
     }
