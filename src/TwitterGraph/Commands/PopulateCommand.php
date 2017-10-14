@@ -233,6 +233,12 @@ class PopulateCommand extends Command
                         $edge_commands[] = $command;
                     }
                 }
+                foreach ($followers_edges as $followers_edge) {
+                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $followers_edge);
+                    if ($command) {
+                        $edge_commands[] = $command;
+                    }
+                }
             }
             if (Likes::class === $_phpclass) {
                 foreach ($likes_edges as $likes_edge) {
