@@ -95,6 +95,16 @@ class Users
      * @Serializer\Type("string")
      * @Serializer\Expose
      * @Serializer\Groups({"Default", "Graph"})
+     * @Graph\PropertyName("profile_image_url_https")
+     * @Graph\PropertyType("String")
+     * @Graph\PropertyCardinality("SINGLE")
+     */
+    public $profile_image_url_https;
+
+    /**
+     * @Serializer\Type("string")
+     * @Serializer\Expose
+     * @Serializer\Groups({"Default", "Graph"})
      * @Graph\PropertyName("description")
      * @Graph\PropertyType("String")
      * @Graph\PropertyCardinality("SINGLE")

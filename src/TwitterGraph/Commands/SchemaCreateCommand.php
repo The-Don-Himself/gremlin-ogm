@@ -73,14 +73,14 @@ class SchemaCreateCommand extends Command
                 $graph_connection->send($command_string, 'session');
             }
         } else {
-            $graph_connection->send('mgmt = graph.openManagement();null');
+            $graph_connection->send('mgmt = graph.openManagement(); null', 'session');
         }
 
         $graph_connection->transaction(function (&$graph_connection, $commands) {
             foreach ($commands as $command) {
                 $graph_connection->send($command, 'session');
             }
-            $graph_connection->send('mgmt.commit()');
+            $graph_connection->send('mgmt.commit()', 'session');
         }, [&$graph_connection, $commands]);
 
         $graph_connection->close();

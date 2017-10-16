@@ -96,7 +96,7 @@ class PopulateCommand extends Command
         );
 
         if (404 == $connection->getLastHttpCode()) {
-            $output->writeln('Twitter User @'.$twitter_handle.' Does Not Exist');
+            $output->writeln('Twitter User @' . $twitter_handle . ' Does Not Exist');
 
             return;
         }
@@ -119,7 +119,7 @@ class PopulateCommand extends Command
             )
         );
 
-        $followers = $serializer->fromArray($decoded_followers['users'], 'array<'.Users::class.'>');
+        $followers = $serializer->fromArray($decoded_followers['users'], 'array<' . Users::class . '>');
         foreach ($followers as $follower) {
             $follower_id = $follower->id;
             $followers_edges[$follower_id] = new Follows($follower_id, $user_id);
@@ -137,7 +137,7 @@ class PopulateCommand extends Command
             )
         );
 
-        $friends = $serializer->fromArray($decoded_friends['users'], 'array<'.Users::class.'>');
+        $friends = $serializer->fromArray($decoded_friends['users'], 'array<' . Users::class . '>');
         foreach ($friends as $friend) {
             $friend_id = $friend->id;
             $friends_edges[$friend_id] = new Follows($user_id, $friend_id);
@@ -155,12 +155,26 @@ class PopulateCommand extends Command
             )
         );
 
-        $likes = $serializer->fromArray($decoded_likes, 'array<'.Tweets::class.'>');
+        $likes = $serializer->fromArray($decoded_likes, 'array<' . Tweets::class . '>');
         foreach ($likes as $like) {
             $like_id = $like->id;
             $likes_edges[$like_id] = new Likes($user_id, $like_id);
 
             $this->populateTweet($like);
+        }
+
+        // Get Timeline Tweets
+        $decoded_tweets = $connection->get(
+            'statuses/user_timeline',
+            array(
+                'screen_name' => $twitter_handle,
+                'count' => 200,
+            )
+        );
+
+        $tweets = $serializer->fromArray($decoded_tweets, 'array<' . Tweets::class . '>');
+        foreach ($tweets as $tweet) {
+            $this->populateTweet($tweet);
         }
 
         // Finished Fetching All The Data From Twitter
@@ -227,14 +241,14 @@ class PopulateCommand extends Command
             $to_vertex = $graph_populate_edges_property['to'];
 
             if (Follows::class === $_phpclass) {
-                foreach ($friends_edges as $friends_edge) {
-                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $friends_edge);
+                foreach ($followers_edges as $followers_edge) {
+                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $followers_edge);
                     if ($command) {
                         $edge_commands[] = $command;
                     }
                 }
-                foreach ($followers_edges as $followers_edge) {
-                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $followers_edge);
+                foreach ($friends_edges as $friends_edge) {
+                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $friends_edge);
                     if ($command) {
                         $edge_commands[] = $command;
                     }
