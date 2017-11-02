@@ -41,9 +41,7 @@ class GraphSerializer
             }
 
             if (is_string($value)) {
-                $value = trim(preg_replace('/\s+/', ' ', $value));
-                $value = addslashes($value);
-                $value = "'$value'";
+                $value = json_encode($value, JSON_UNESCAPED_SLASHES);
             }
 
             if (is_bool($value)) {
@@ -104,14 +102,26 @@ class GraphSerializer
                     continue;
                 }
 
+                if ('_map' === $value_key) {
+                    $map = $this->toString($value_value);
+
+                    if ($map) {
+                        $value_value = "Map.of($map)";
+                    } else {
+                        $value_value = 'null';
+                    }
+
+                    $string_array[] = "'$key'";
+                    $string_array[] = $value_value;
+                    continue;
+                }
+
                 if (is_object($value_value)) {
                     throw new UnserializableException($value_key, 'Cannot Serialize Objects To String Please Convert To Array First');
                 }
 
                 if (is_string($value_value)) {
-                    $value_value = trim(preg_replace('/\s+/', ' ', $value_value));
-                    $value_value = addslashes($value_value);
-                    $value_value = "'$value_value'";
+                    $value_value = json_encode($value_value, JSON_UNESCAPED_SLASHES);
                 }
 
                 if (is_bool($value_value)) {
@@ -142,9 +152,7 @@ class GraphSerializer
             }
 
             if (is_string($value)) {
-                $value = trim(preg_replace('/\s+/', ' ', $value));
-                $value = addslashes($value);
-                $value = "'$value'";
+                $value = json_encode($value, JSON_UNESCAPED_SLASHES);
             }
 
             if (is_bool($value)) {
@@ -201,14 +209,26 @@ class GraphSerializer
                     continue;
                 }
 
+                if ('_map' === $value_key) {
+                    $map = $this->toString($value_value);
+
+                    if ($map) {
+                        $value_value = "Map.of($map)";
+                    } else {
+                        $value_value = 'null';
+                    }
+
+                    $string_array[] = "'$key'";
+                    $string_array[] = $value_value;
+                    continue;
+                }
+
                 if (is_object($value_value)) {
                     throw new UnserializableException($value_key, 'Cannot Serialize Objects To String Please Convert To Array First');
                 }
 
                 if (is_string($value_value)) {
-                    $value_value = trim(preg_replace('/\s+/', ' ', $value_value));
-                    $value_value = addslashes($value_value);
-                    $value_value = "'$value_value'";
+                    $value_value = json_encode($value_value, JSON_UNESCAPED_SLASHES);
                 }
 
                 if (is_bool($value_value)) {
@@ -269,9 +289,7 @@ class GraphSerializer
         }
 
         if (is_string($from_vertex_value)) {
-            $from_vertex_value = trim(preg_replace('/\s+/', ' ', $from_vertex_value));
-            $from_vertex_value = addslashes($from_vertex_value);
-            $from_vertex_value = "'$from_vertex_value'";
+            $from_vertex_value = json_encode($from_vertex_value, JSON_UNESCAPED_SLASHES);
         }
 
         if (is_bool($from_vertex_value)) {
@@ -292,9 +310,7 @@ class GraphSerializer
         }
 
         if (is_string($to_vertex_value)) {
-            $to_vertex_value = trim(preg_replace('/\s+/', ' ', $to_vertex_value));
-            $to_vertex_value = addslashes($to_vertex_value);
-            $to_vertex_value = "'$to_vertex_value'";
+            $to_vertex_value = json_encode($to_vertex_value, JSON_UNESCAPED_SLASHES);
         }
 
         if (is_bool($to_vertex_value)) {

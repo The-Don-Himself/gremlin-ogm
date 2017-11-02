@@ -3,6 +3,7 @@
 use Symfony\Component\Console\Application;
 use TheDonHimself\GremlinOGM\TwitterGraph\Graph\Commands\EdgesCountCommand;
 use TheDonHimself\GremlinOGM\TwitterGraph\Graph\Commands\EdgesDeleteCommand;
+use TheDonHimself\GremlinOGM\TwitterGraph\Graph\Commands\GremlinTraversalCommand;
 use TheDonHimself\GremlinOGM\TwitterGraph\Graph\Commands\SchemaCheckCommand;
 use TheDonHimself\GremlinOGM\TwitterGraph\Graph\Commands\SchemaCreateCommand;
 use TheDonHimself\GremlinOGM\TwitterGraph\Graph\Commands\PopulateCommand;
@@ -22,6 +23,7 @@ $application = new Application();
 
 $application->add(new EdgesCountCommand());
 $application->add(new EdgesDeleteCommand());
+$application->add(new GremlinTraversalCommand());
 $application->add(new SchemaCheckCommand());
 $application->add(new SchemaCreateCommand());
 $application->add(new PopulateCommand());
