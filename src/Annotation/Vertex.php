@@ -19,6 +19,20 @@ class Vertex
     public $label;
 
     /**
+     * Reference : http://docs.janusgraph.org/latest/advanced-schema.html#_static_vertices
+     *
+     * @var boolean
+     */
+    public $static = false;
+
+    /**
+     * Reference : http://docs.janusgraph.org/latest/advanced-schema.html#_vertex_ttl
+     *
+     * @var string Duration.of TTL
+     */
+    public $ttl;
+
+    /**
      * @var array<\TheDonHimself\GremlinOGM\Annotation\Index>
      */
     public $indexes = array();

@@ -21,13 +21,33 @@ class SchemaCreate
 
         $vertexes_commands = array();
         foreach ($graph_vertexes as $label => $vertex_properties) {
-            $vertexes_commands[] = "$label = mgmt.makeVertexLabel('$label').make();";
+            $command = "$label = mgmt.makeVertexLabel('$label')";
+
+            isset($vertex_properties['static']) ? $command = $command . ".setStatic()" : null;
+
+            $command = $command . ".make();";
+            $vertexes_commands[] = $command;
+
+            $ttl = $vertex_properties['ttl'] ?? null;
+            if($ttl){
+                $vertexes_commands[] = "mgmt.setTTL($label, $ttl);";             
+            }
         }
 
         $edges_commands = array();
         foreach ($graph_edges as $label => $edge_properties) {
             $multiplicity = $edge_properties['multiplicity'];
-            $edges_commands[] = "$label = mgmt.makeEdgeLabel('$label').multiplicity($multiplicity).make();";
+            $command = "$label = mgmt.makeEdgeLabel('$label').multiplicity($multiplicity)";
+
+            isset($edge_properties['unidirected']) ? $command = $command . ".unidirected()" : null;
+
+            $command = $command . ".make();";
+            $edges_commands[] = $command;
+
+            $ttl = $edge_properties['ttl'] ?? null;
+            if($ttl){
+                $edges_commands[] = "mgmt.setTTL($label, $ttl);";             
+            }
         }
 
         $indexes_commands = array();

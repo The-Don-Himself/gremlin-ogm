@@ -29,6 +29,20 @@ class Edge
     public $multiplicity;
 
     /**
+     * Reference : http://docs.janusgraph.org/latest/advanced-schema.html#_unidirected_edges
+     *
+     * @var boolean
+     */
+    public $unidirected;
+
+    /**
+     * Reference : http://docs.janusgraph.org/latest/advanced-schema.html#_edge_ttl
+     *
+     * @var string Duration.of TTL
+     */
+    public $ttl;
+
+    /**
      * @var array<\TheDonHimself\GremlinOGM\Annotation\Index>
      */
     public $indexes = array();

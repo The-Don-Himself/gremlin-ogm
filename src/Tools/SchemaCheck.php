@@ -110,8 +110,12 @@ class SchemaCheck
                 if (isset($graph_vertexes[$label])) {
                     throw new VertexLabelsConflictException($label, $class);
                 }
+                $static = $vertexAnnotations->static;
+                $ttl = $vertexAnnotations->ttl;
                 $graph_vertexes[$label] = array(
                     '_phpclass' => $class,
+                    'static' => $static,
+                    'ttl' => $ttl,
                 );
                 $indexes = $vertexAnnotations->indexes;
                 foreach ($indexes as $index) {
@@ -168,9 +172,13 @@ class SchemaCheck
                     $message = $message.PHP_EOL;
                     trigger_error($message, E_USER_NOTICE);
                 }
+                $unidirected = $edgeAnnotations->unidirected;
+                $ttl = $edgeAnnotations->ttl;
                 $graph_edges[$label] = array(
                     '_phpclass' => $class,
                     'multiplicity' => $multiplicity,
+                    'unidirected' => $unidirected,
+                    'ttl' => $ttl,
                 );
                 $indexes = $edgeAnnotations->indexes;
                 foreach ($indexes as $index) {

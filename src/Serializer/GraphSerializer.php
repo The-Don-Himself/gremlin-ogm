@@ -102,11 +102,39 @@ class GraphSerializer
                     continue;
                 }
 
-                if ('_map' === $value_key) {
-                    $map = $this->toString($value_value);
+                if ('_map_of' === $value_key) {
+                    $mapOf = $this->toString($value_value);
 
-                    if ($map) {
-                        $value_value = "Map.of($map)";
+                    if ($mapOf) {
+                        $value_value = "Map.of($mapOf)";
+                    } else {
+                        $value_value = 'null';
+                    }
+
+                    $string_array[] = "'$key'";
+                    $string_array[] = $value_value;
+                    continue;
+                }
+
+                if ('_list_collection' === $value_key) {
+                    $listCollection = implode(', ', $value_value);
+
+                    if ($listCollection) {
+                        $value_value = "[ $listCollection ]";
+                    } else {
+                        $value_value = 'null';
+                    }
+
+                    $string_array[] = "'$key'";
+                    $string_array[] = $value_value;
+                    continue;
+                }
+
+                if ('_map_collection' === $value_key) {
+                    $mapCollection = $this->toCollection($value_value);
+
+                    if ($mapCollection) {
+                        $value_value = "[ $mapCollection ]";
                     } else {
                         $value_value = 'null';
                     }
@@ -209,11 +237,39 @@ class GraphSerializer
                     continue;
                 }
 
-                if ('_map' === $value_key) {
+                if ('_map_of' === $value_key) {
                     $map = $this->toString($value_value);
 
                     if ($map) {
                         $value_value = "Map.of($map)";
+                    } else {
+                        $value_value = 'null';
+                    }
+
+                    $string_array[] = "'$key'";
+                    $string_array[] = $value_value;
+                    continue;
+                }
+
+                if ('_list_collection' === $value_key) {
+                    $listCollection = implode(', ', $value_value);
+
+                    if ($listCollection) {
+                        $value_value = "[ $listCollection ]";
+                    } else {
+                        $value_value = 'null';
+                    }
+
+                    $string_array[] = "'$key'";
+                    $string_array[] = $value_value;
+                    continue;
+                }
+
+                if ('_map_collection' === $value_key) {
+                    $mapCollection = $this->toCollection($value_value);
+
+                    if ($mapCollection) {
+                        $value_value = "[ $mapCollection ]";
                     } else {
                         $value_value = 'null';
                     }
@@ -244,6 +300,140 @@ class GraphSerializer
         }
 
         $string = $string_array ? implode('', $string_array) : null;
+
+        return $string;
+    }
+
+
+    public function toCollection(array $array)
+    {
+        $string_array = array();
+
+        foreach ($array as $key => $value) {
+            if (is_object($value)) {
+                throw new UnserializableException($key, 'Cannot Serialize Objects To String Please Convert To Array First');
+            }
+
+            if (is_string($value)) {
+                $value = json_encode($value, JSON_UNESCAPED_SLASHES);
+            }
+
+            if (is_bool($value)) {
+                $value = $value ? 'true' : 'false';
+            }
+
+            if (!is_array($value)) {
+                $string_array[] = "$key: $value";
+                continue;
+            }
+
+            foreach ((array) $value as $value_key => $value_value) {
+                if ('_geoshapepoint' === $value_key) {
+                    $lat = isset($value_value['lat']) ? $value_value['lat'] : null;
+                    $lon = isset($value_value['lon']) ? $value_value['lon'] : null;
+
+                    if ($lat && $lon) {
+                        $value_value = "Geoshape.point($lat, $lon)";
+                    } else {
+                        $value_value = 'null';
+                    }
+
+                    $string_array[] = "$key: $value_value";
+                    continue;
+                }
+
+                if ('_geoshapecircle' === $value_key) {
+                    $lat = isset($value_value['lat']) ? $value_value['lat'] : null;
+                    $lon = isset($value_value['lon']) ? $value_value['lon'] : null;
+                    $radius = isset($value_value['radius']) ? $value_value['radius'] : null;
+                    if ($lat && $lon && $radius) {
+                        $value_value = "Geoshape.circle($lat, $lon, $radius)";
+                    } else {
+                        $value_value = 'null';
+                    }
+
+                    $string_array[] = "$key: $value_value";
+                    continue;
+                }
+
+                if ('_geoshapebox' === $value_key) {
+                    $sw_lat = isset($value_value['sw_lat']) ? $value_value['sw_lat'] : null;
+                    $sw_lon = isset($value_value['sw_lon']) ? $value_value['sw_lon'] : null;
+                    $ne_lat = isset($value_value['ne_lat']) ? $value_value['ne_lat'] : null;
+                    $ne_lon = isset($value_value['ne_lon']) ? $value_value['ne_lon'] : null;
+
+                    if ($sw_lat && $sw_lon && $ne_lat && $ne_lon) {
+                        $value_value = "Geoshape.box($sw_lat, $sw_lon, $ne_lat, $ne_lon)";
+                    } else {
+                        $value_value = 'null';
+                    }
+
+                    $string_array[] = "$key: $value_value";
+                    continue;
+                }
+
+                if ('_map_of' === $value_key) {
+                    $mapOf = $this->toString($value_value);
+
+                    if ($mapOf) {
+                        $value_value = "Map.of($mapOf)";
+                    } else {
+                        $value_value = 'null';
+                    }
+
+                    $string_array[] = "$key: $value_value";
+                    continue;
+                }
+
+                if ('_list_collection' === $value_key) {
+                    $listCollection = implode(', ', $value_value);
+
+                    if ($listCollection) {
+                        $value_value = "[ $listCollection ]";
+                    } else {
+                        $value_value = 'null';
+                    }
+
+                    $string_array[] = "'$key'";
+                    $string_array[] = $value_value;
+                    continue;
+                }
+
+                if ('_map_collection' === $value_key) {
+                    $mapCollection = $this->toCollection($value_value);
+
+                    if ($mapCollection) {
+                        $value_value = "[ $mapCollection ]";
+                    } else {
+                        $value_value = 'null';
+                    }
+
+                    $string_array[] = "$key: $value_value";
+                    continue;
+                }
+
+                if (is_object($value_value)) {
+                    throw new UnserializableException($value_key, 'Cannot Serialize Objects To String Please Convert To Array First');
+                }
+
+                if (is_string($value_value)) {
+                    $value_value = json_encode($value_value, JSON_UNESCAPED_SLASHES);
+                }
+
+                if (is_bool($value_value)) {
+                    $value_value = $value_value ? 'true' : 'false';
+                }
+
+                if (is_array($value_value)) {
+                    throw new UnserializableException($key, 'It Is Currently Not Possible To Stringify Multidimensional Arrays, Pull Requests Are Welcome To Do So');
+                }
+
+                $string_array[] = "'$key'";
+                $string_array[] = "$value_value";
+            }
+        }
+
+        $string = $string_array ? implode(', ', $string_array) : null;
 
         return $string;
     }

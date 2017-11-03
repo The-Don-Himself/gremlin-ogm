@@ -7,31 +7,31 @@ use JMS\Serializer\Annotation as Serializer;
 /**
  *  @Serializer\ExclusionPolicy("all")
  */
-class MapOf
+class ListCollection
 {
     /**
      * @param array
      * @Serializer\Expose
      * @Serializer\Groups({"Default", "Graph"})
      * @Serializer\Type("array")
-     * @Serializer\SerializedName("_map_of")
+     * @Serializer\SerializedName("_list_collection")
      */
-    public $_map_of = array();
+    public $_list_collection = array();
 
     /**
      * @param array $array
      */
     public function __construct(array $array)
     {
-        $this->_map_of = $array;
+        $this->_list_collection = $array;
     }
 
     /**
-     * @return _map_of
+     * @return _list_collection
      */
-    public function getMapOf()
+    public function getListCollection()
     {
-        return $this->_map_of;
+        return $this->_list_collection;
     }
 
 }
