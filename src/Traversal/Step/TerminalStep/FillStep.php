@@ -10,5 +10,4 @@ class FillStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.fill(';
-
 }

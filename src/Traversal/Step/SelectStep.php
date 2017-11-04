@@ -10,5 +10,4 @@ class SelectStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.select(';
-
 }

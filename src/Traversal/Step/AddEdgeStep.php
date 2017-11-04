@@ -10,5 +10,4 @@ class AddEdgeStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.addEdge(';
-
 }

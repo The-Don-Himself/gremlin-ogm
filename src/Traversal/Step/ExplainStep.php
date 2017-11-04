@@ -10,5 +10,4 @@ class ExplainStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.explain(';
-
 }

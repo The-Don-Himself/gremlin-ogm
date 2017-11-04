@@ -10,5 +10,4 @@ class NotStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.not(';
-
 }

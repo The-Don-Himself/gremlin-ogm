@@ -10,5 +10,4 @@ class ProjectStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.project(';
-
 }

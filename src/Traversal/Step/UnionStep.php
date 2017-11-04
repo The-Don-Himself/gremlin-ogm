@@ -10,5 +10,4 @@ class UnionStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.union(';
-
 }

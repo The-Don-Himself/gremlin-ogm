@@ -10,5 +10,4 @@ class ToListStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.toList(';
-
 }

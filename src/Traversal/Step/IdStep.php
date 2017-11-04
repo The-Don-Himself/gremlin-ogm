@@ -10,5 +10,4 @@ class IdStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.id(';
-
 }

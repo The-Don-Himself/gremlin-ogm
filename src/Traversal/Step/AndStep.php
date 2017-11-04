@@ -10,5 +10,4 @@ class AndStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.and(';
-
 }

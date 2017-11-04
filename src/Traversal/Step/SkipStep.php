@@ -10,5 +10,4 @@ class SkipStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.skip(';
-
 }

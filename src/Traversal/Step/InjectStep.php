@@ -10,5 +10,4 @@ class InjectStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.inject(';
-
 }

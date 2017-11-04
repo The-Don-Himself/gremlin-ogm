@@ -10,5 +10,4 @@ class CyclicPathStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.cyclicPath(';
-
 }

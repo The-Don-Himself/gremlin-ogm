@@ -10,5 +10,4 @@ class OrStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.or(';
-
 }

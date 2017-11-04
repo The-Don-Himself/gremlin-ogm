@@ -10,5 +10,4 @@ class GroupCountStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.groupCount(';
-
 }

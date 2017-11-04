@@ -19,11 +19,11 @@ class TweetsRepository extends GraphRepository
             (new TraversalBuilder())->out("'tweeted'")->getTraversal(),
             (new TraversalBuilder())->out("'follows'")->out("'tweeted'")->getTraversal()
           )
-          ->order()->by("'created'", "decr")
+          ->order()->by("'created'", 'decr')
           ->limit(10)
           ->getTraversal();
         var_dump($command);
+
         return $command;
     }
-
 }

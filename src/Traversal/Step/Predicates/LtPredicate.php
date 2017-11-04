@@ -10,5 +10,4 @@ class LtPredicate extends BaseStep
      * @var string
      */
     protected $preSeparator = '.lt(';
-
 }

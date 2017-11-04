@@ -10,5 +10,4 @@ class BothStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.both(';
-
 }

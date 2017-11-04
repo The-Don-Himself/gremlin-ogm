@@ -10,5 +10,4 @@ class PeerPressureStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.peerPressure(';
-
 }

@@ -10,5 +10,4 @@ class OtherVStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.otherV(';
-
 }

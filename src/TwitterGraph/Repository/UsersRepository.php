@@ -4,19 +4,20 @@ namespace TheDonHimself\GremlinOGM\TwitterGraph\Repository;
 
 use TheDonHimself\GremlinOGM\Repository\GraphRepository;
 use TheDonHimself\GremlinOGM\Traversal\TraversalBuilder;
+
 // use TheDonHimself\GremlinOGM\Traversal\Step\AggregateStep;
 
 class UsersRepository extends GraphRepository
 {
     public function queryUsers()
     {
-/*
-        $args = [0 => "'x'"];
-        $aggregate = new AggregateStep($args);
-        $aggregate_command = $aggregate->__toString();
-        var_dump($aggregate_command);
-        return;
-*/
+        /*
+                $args = [0 => "'x'"];
+                $aggregate = new AggregateStep($args);
+                $aggregate_command = $aggregate->__toString();
+                var_dump($aggregate_command);
+                return;
+        */
 
         $traversalBuilder = new TraversalBuilder();
         $command = $traversalBuilder
@@ -29,7 +30,7 @@ class UsersRepository extends GraphRepository
           )
           ->getTraversal();
         var_dump($command);
+
         return $command;
     }
-
 }

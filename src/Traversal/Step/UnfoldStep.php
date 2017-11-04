@@ -10,5 +10,4 @@ class UnfoldStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.unfold(';
-
 }

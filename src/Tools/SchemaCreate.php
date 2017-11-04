@@ -23,14 +23,16 @@ class SchemaCreate
         foreach ($graph_vertexes as $label => $vertex_properties) {
             $command = "$label = mgmt.makeVertexLabel('$label')";
 
-            isset($vertex_properties['static']) ? $command = $command . ".setStatic()" : null;
+            if (isset($vertex_properties['static']) && true === $vertex_properties['static']) {
+                $command = $command.'.setStatic()';
+            }
 
-            $command = $command . ".make();";
+            $command = $command.'.make();';
             $vertexes_commands[] = $command;
 
             $ttl = $vertex_properties['ttl'] ?? null;
-            if($ttl){
-                $vertexes_commands[] = "mgmt.setTTL($label, $ttl);";             
+            if ($ttl) {
+                $vertexes_commands[] = "mgmt.setTTL($label, $ttl);";
             }
         }
 
@@ -39,14 +41,16 @@ class SchemaCreate
             $multiplicity = $edge_properties['multiplicity'];
             $command = "$label = mgmt.makeEdgeLabel('$label').multiplicity($multiplicity)";
 
-            isset($edge_properties['unidirected']) ? $command = $command . ".unidirected()" : null;
+            if (isset($edge_properties['unidirected']) && true === $edge_properties['unidirected']) {
+                $command = $command.'.unidirected()';
+            }
 
-            $command = $command . ".make();";
+            $command = $command.'.make();';
             $edges_commands[] = $command;
 
             $ttl = $edge_properties['ttl'] ?? null;
-            if($ttl){
-                $edges_commands[] = "mgmt.setTTL($label, $ttl);";             
+            if ($ttl) {
+                $edges_commands[] = "mgmt.setTTL($label, $ttl);";
             }
         }
 

@@ -10,5 +10,4 @@ class DedupStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.dedup(';
-
 }

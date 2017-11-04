@@ -10,5 +10,4 @@ class SubgraphStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.subgraph(';
-
 }

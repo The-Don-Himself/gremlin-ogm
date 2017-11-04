@@ -10,5 +10,4 @@ class GroupStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.group(';
-
 }

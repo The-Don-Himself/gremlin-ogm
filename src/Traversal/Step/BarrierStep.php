@@ -10,5 +10,4 @@ class BarrierStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.barrier(';
-
 }

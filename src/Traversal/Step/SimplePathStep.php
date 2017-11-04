@@ -10,5 +10,4 @@ class SimplePathStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.simplePath(';
-
 }

@@ -96,7 +96,7 @@ class PopulateCommand extends Command
         );
 
         if (404 == $connection->getLastHttpCode()) {
-            $output->writeln('Twitter User @' . $twitter_handle . ' Does Not Exist');
+            $output->writeln('Twitter User @'.$twitter_handle.' Does Not Exist');
 
             return;
         }
@@ -119,7 +119,7 @@ class PopulateCommand extends Command
             )
         );
 
-        $followers = $serializer->fromArray($decoded_followers['users'], 'array<' . Users::class . '>');
+        $followers = $serializer->fromArray($decoded_followers['users'], 'array<'.Users::class.'>');
         foreach ($followers as $follower) {
             $follower_id = $follower->id;
             $followers_edges[$follower_id] = new Follows($follower_id, $user_id);
@@ -137,7 +137,7 @@ class PopulateCommand extends Command
             )
         );
 
-        $friends = $serializer->fromArray($decoded_friends['users'], 'array<' . Users::class . '>');
+        $friends = $serializer->fromArray($decoded_friends['users'], 'array<'.Users::class.'>');
         foreach ($friends as $friend) {
             $friend_id = $friend->id;
             $friends_edges[$friend_id] = new Follows($user_id, $friend_id);
@@ -155,7 +155,7 @@ class PopulateCommand extends Command
             )
         );
 
-        $likes = $serializer->fromArray($decoded_likes, 'array<' . Tweets::class . '>');
+        $likes = $serializer->fromArray($decoded_likes, 'array<'.Tweets::class.'>');
         foreach ($likes as $like) {
             $like_id = $like->id;
             $likes_edges[$like_id] = new Likes($user_id, $like_id);
@@ -172,7 +172,7 @@ class PopulateCommand extends Command
             )
         );
 
-        $tweets = $serializer->fromArray($decoded_tweets, 'array<' . Tweets::class . '>');
+        $tweets = $serializer->fromArray($decoded_tweets, 'array<'.Tweets::class.'>');
         foreach ($tweets as $tweet) {
             $this->populateTweet($tweet);
         }
@@ -312,7 +312,7 @@ class PopulateCommand extends Command
             }
         }, [&$graph_connection, $vertex_commands]);
 
-        $output->writeln('Done! ' . count($vertex_commands) . ' Vertexes Created');
+        $output->writeln('Done! '.count($vertex_commands).' Vertexes Created');
 
         $output->writeln('Creating Edges...');
 
@@ -324,7 +324,7 @@ class PopulateCommand extends Command
 
         $graph_connection->close();
 
-        $output->writeln('Done! ' . count($edge_commands) . ' Edges Created');
+        $output->writeln('Done! '.count($edge_commands).' Edges Created');
 
         $output->writeln('Graph Populated Successfully!');
     }

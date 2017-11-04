@@ -10,5 +10,4 @@ class LabelStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.label(';
-
 }

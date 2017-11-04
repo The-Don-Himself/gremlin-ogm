@@ -10,5 +10,4 @@ class SampleStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.sample(';
-
 }

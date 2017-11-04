@@ -26,6 +26,7 @@ class GremlinTraversalCommand extends Command
     {
         $repo = new \TheDonHimself\GremlinOGM\TwitterGraph\Repository\TweetsRepository();
         $command = $repo->getTimelineForScreenName('the_don_himself');
+
         return;
 
         $gremlin_command = $input->getArgument('traversal');

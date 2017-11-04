@@ -10,5 +10,4 @@ class ValueMapStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.valueMap(';
-
 }

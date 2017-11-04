@@ -19,14 +19,14 @@ class Vertex
     public $label;
 
     /**
-     * Reference : http://docs.janusgraph.org/latest/advanced-schema.html#_static_vertices
+     * Reference : http://docs.janusgraph.org/latest/advanced-schema.html#_static_vertices.
      *
      * @var boolean
      */
     public $static = false;
 
     /**
-     * Reference : http://docs.janusgraph.org/latest/advanced-schema.html#_vertex_ttl
+     * Reference : http://docs.janusgraph.org/latest/advanced-schema.html#_vertex_ttl.
      *
      * @var string Duration.of TTL
      */

@@ -10,5 +10,4 @@ class SackStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.sack(';
-
 }

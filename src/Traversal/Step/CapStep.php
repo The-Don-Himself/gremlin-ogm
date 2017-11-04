@@ -10,5 +10,4 @@ class CapStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.cap(';
-
 }

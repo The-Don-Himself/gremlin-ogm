@@ -10,5 +10,4 @@ class BetweenPredicate extends BaseStep
      * @var string
      */
     protected $preSeparator = '.between(';
-
 }

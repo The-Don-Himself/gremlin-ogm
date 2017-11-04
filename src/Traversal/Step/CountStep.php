@@ -10,5 +10,4 @@ class CountStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.count(';
-
 }

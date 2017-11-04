@@ -10,5 +10,4 @@ class KeyStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.key(';
-
 }

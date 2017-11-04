@@ -10,5 +10,4 @@ class VStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.V(';
-
 }

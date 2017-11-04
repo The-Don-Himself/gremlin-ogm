@@ -10,5 +10,4 @@ class InVStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.inV(';
-
 }

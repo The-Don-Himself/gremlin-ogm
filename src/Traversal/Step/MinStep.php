@@ -10,5 +10,4 @@ class MinStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.min(';
-
 }

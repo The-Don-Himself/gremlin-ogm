@@ -10,5 +10,4 @@ class StoreStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.store(';
-
 }

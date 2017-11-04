@@ -10,5 +10,4 @@ class PropertyMapStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.propertyMap(';
-
 }

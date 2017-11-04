@@ -10,5 +10,4 @@ class EqPredicate extends BaseStep
      * @var string
      */
     protected $preSeparator = '.eq(';
-
 }

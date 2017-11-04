@@ -10,5 +10,4 @@ class RepeatStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.repeat(';
-
 }

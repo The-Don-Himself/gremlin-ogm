@@ -10,5 +10,4 @@ class IsStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.is(';
-
 }

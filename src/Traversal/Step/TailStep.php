@@ -10,5 +10,4 @@ class TailStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.tail(';
-
 }

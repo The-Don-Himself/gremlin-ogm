@@ -29,14 +29,14 @@ class Edge
     public $multiplicity;
 
     /**
-     * Reference : http://docs.janusgraph.org/latest/advanced-schema.html#_unidirected_edges
+     * Reference : http://docs.janusgraph.org/latest/advanced-schema.html#_unidirected_edges.
      *
      * @var boolean
      */
-    public $unidirected;
+    public $unidirected = false;
 
     /**
-     * Reference : http://docs.janusgraph.org/latest/advanced-schema.html#_edge_ttl
+     * Reference : http://docs.janusgraph.org/latest/advanced-schema.html#_edge_ttl.
      *
      * @var string Duration.of TTL
      */

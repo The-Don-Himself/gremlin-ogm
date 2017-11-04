@@ -10,5 +10,4 @@ class ConstantStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.constant(';
-
 }

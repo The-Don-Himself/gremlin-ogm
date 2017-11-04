@@ -10,5 +10,4 @@ class ByStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.by(';
-
 }

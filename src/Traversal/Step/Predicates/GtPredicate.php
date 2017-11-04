@@ -10,5 +10,4 @@ class GtPredicate extends BaseStep
      * @var string
      */
     protected $preSeparator = '.gt(';
-
 }

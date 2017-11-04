@@ -10,5 +10,4 @@ class WhereStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.where(';
-
 }

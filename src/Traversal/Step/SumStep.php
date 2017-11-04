@@ -10,5 +10,4 @@ class SumStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.sum(';
-
 }

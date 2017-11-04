@@ -10,5 +10,4 @@ class LoopsStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.loops(';
-
 }

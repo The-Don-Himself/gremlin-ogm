@@ -10,5 +10,4 @@ class MeanStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.mean(';
-
 }

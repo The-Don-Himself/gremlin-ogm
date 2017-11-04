@@ -10,5 +10,4 @@ class TimesStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.times(';
-
 }

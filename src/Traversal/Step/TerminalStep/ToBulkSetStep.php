@@ -10,5 +10,4 @@ class ToBulkSetStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.toBulkSet(';
-
 }

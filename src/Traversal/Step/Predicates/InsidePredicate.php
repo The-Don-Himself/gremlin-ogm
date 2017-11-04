@@ -10,5 +10,4 @@ class InsidePredicate extends BaseStep
      * @var string
      */
     protected $preSeparator = '.inside(';
-
 }

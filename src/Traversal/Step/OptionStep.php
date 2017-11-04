@@ -10,5 +10,4 @@ class OptionStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.option(';
-
 }

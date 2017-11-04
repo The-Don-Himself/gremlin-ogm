@@ -10,5 +10,4 @@ class PageRankStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.pageRank(';
-
 }

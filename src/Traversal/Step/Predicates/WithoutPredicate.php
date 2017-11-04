@@ -10,5 +10,4 @@ class WithoutPredicate extends BaseStep
      * @var string
      */
     protected $preSeparator = '.without(';
-
 }

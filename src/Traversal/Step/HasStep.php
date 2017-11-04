@@ -10,5 +10,4 @@ class HasStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.has(';
-
 }

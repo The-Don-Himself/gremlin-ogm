@@ -10,5 +10,4 @@ class TimeLimitStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.timeLimit(';
-
 }

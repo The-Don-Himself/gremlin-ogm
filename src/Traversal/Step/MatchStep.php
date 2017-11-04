@@ -10,5 +10,4 @@ class MatchStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.match(';
-
 }

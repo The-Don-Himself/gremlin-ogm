@@ -33,5 +33,4 @@ class MapOf
     {
         return $this->_map_of;
     }
-
 }

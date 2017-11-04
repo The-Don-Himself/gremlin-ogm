@@ -10,5 +10,4 @@ class DropStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.drop(';
-
 }

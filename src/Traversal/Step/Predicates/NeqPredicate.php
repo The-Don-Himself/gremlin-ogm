@@ -10,5 +10,4 @@ class NeqPredicate extends BaseStep
      * @var string
      */
     protected $preSeparator = '.neq(';
-
 }

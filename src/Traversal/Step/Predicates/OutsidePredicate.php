@@ -10,5 +10,4 @@ class OutsidePredicate extends BaseStep
      * @var string
      */
     protected $preSeparator = '.outside(';
-
 }

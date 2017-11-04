@@ -10,5 +10,4 @@ class RangeStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.range(';
-
 }

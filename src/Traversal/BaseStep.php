@@ -53,7 +53,7 @@ class BaseStep
      */
     public function add($arg)
     {
-        if ( $arg !== null && (!$arg instanceof self || $arg->count() > 0) ) {
+        if (null !== $arg && (!$arg instanceof self || $arg->count() > 0)) {
             $this->parts[] = $arg;
         }
 
@@ -73,6 +73,6 @@ class BaseStep
      */
     public function __toString()
     {
-        return $this->preSeparator . implode($this->separator, $this->parts) . $this->postSeparator;
+        return $this->preSeparator.implode($this->separator, $this->parts).$this->postSeparator;
     }
 }

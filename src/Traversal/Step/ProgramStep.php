@@ -10,5 +10,4 @@ class ProgramStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.program(';
-
 }

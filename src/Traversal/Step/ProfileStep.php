@@ -10,5 +10,4 @@ class ProfileStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.profile(';
-
 }

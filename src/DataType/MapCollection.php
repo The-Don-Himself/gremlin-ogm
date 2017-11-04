@@ -33,5 +33,4 @@ class MapCollection
     {
         return $this->_map_collection;
     }
-
 }

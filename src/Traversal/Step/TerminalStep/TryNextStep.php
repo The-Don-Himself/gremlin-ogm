@@ -10,5 +10,4 @@ class TryNextStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.tryNext(';
-
 }

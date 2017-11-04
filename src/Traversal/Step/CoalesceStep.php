@@ -10,5 +10,4 @@ class CoalesceStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.coalesce(';
-
 }

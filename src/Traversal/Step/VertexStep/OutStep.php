@@ -10,5 +10,4 @@ class OutStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.out(';
-
 }

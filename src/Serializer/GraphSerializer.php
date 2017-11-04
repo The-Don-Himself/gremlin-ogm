@@ -304,7 +304,6 @@ class GraphSerializer
         return $string;
     }
 
-
     public function toCollection(array $array)
     {
         $string_array = array();

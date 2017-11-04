@@ -10,5 +10,4 @@ class TreeStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.tree(';
-
 }

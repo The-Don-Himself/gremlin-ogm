@@ -10,5 +10,4 @@ class CoinStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.coin(';
-
 }

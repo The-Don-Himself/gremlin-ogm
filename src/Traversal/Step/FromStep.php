@@ -10,5 +10,4 @@ class FromStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.from(';
-
 }

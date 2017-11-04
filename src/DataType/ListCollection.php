@@ -33,5 +33,4 @@ class ListCollection
     {
         return $this->_list_collection;
     }
-
 }

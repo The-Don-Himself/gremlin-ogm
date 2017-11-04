@@ -10,5 +10,4 @@ class AggregateStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.aggregate(';
-
 }

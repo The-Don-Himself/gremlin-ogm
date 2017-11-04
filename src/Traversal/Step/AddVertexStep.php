@@ -10,5 +10,4 @@ class AddVertexStep extends BaseStep
      * @var string
      */
     protected $preSeparator = '.addVertex(';
-
 }
