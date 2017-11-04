@@ -42,6 +42,7 @@ class GraphSerializer
 
             if (is_string($value)) {
                 $value = json_encode($value, JSON_UNESCAPED_SLASHES);
+                $value = $this->interchangeSlashes($value);
             }
 
             if (is_bool($value)) {
@@ -150,6 +151,7 @@ class GraphSerializer
 
                 if (is_string($value_value)) {
                     $value_value = json_encode($value_value, JSON_UNESCAPED_SLASHES);
+                    $value_value = $this->interchangeSlashes($value_value);
                 }
 
                 if (is_bool($value_value)) {
@@ -181,6 +183,7 @@ class GraphSerializer
 
             if (is_string($value)) {
                 $value = json_encode($value, JSON_UNESCAPED_SLASHES);
+                $value = $this->interchangeSlashes($value);
             }
 
             if (is_bool($value)) {
@@ -285,6 +288,7 @@ class GraphSerializer
 
                 if (is_string($value_value)) {
                     $value_value = json_encode($value_value, JSON_UNESCAPED_SLASHES);
+                    $value_value = $this->interchangeSlashes($value_value);
                 }
 
                 if (is_bool($value_value)) {
@@ -315,6 +319,7 @@ class GraphSerializer
 
             if (is_string($value)) {
                 $value = json_encode($value, JSON_UNESCAPED_SLASHES);
+                $value = $this->interchangeSlashes($value);
             }
 
             if (is_bool($value)) {
@@ -417,6 +422,7 @@ class GraphSerializer
 
                 if (is_string($value_value)) {
                     $value_value = json_encode($value_value, JSON_UNESCAPED_SLASHES);
+                    $value_value = $this->interchangeSlashes($value_value);
                 }
 
                 if (is_bool($value_value)) {
@@ -479,6 +485,7 @@ class GraphSerializer
 
         if (is_string($from_vertex_value)) {
             $from_vertex_value = json_encode($from_vertex_value, JSON_UNESCAPED_SLASHES);
+            $from_vertex_value = $this->interchangeSlashes($from_vertex_value);
         }
 
         if (is_bool($from_vertex_value)) {
@@ -500,6 +507,7 @@ class GraphSerializer
 
         if (is_string($to_vertex_value)) {
             $to_vertex_value = json_encode($to_vertex_value, JSON_UNESCAPED_SLASHES);
+            $to_vertex_value = $this->interchangeSlashes($to_vertex_value);
         }
 
         if (is_bool($to_vertex_value)) {
@@ -517,4 +525,25 @@ class GraphSerializer
 
         return "if ($add_edge_from_vertex.hasNext() == true && $add_edge_to_vertex.hasNext() == true) { $add_edge_from_vertex.next().addEdge('$edge_label', $add_edge_to_vertex.next()$properties_string) };";
     }
+
+    public function interchangeSlashes(string $string)
+    {
+        $string = json_encode($string, JSON_UNESCAPED_SLASHES);
+        // Interchange Double Quotes For Single Quotes
+
+        // Start By Adding Slashes To All Existing Single Quotes
+        $string = str_replace("'", "\\'", $string);
+
+        // Then Remove Any Slashes To All Existing Double Quotes
+        $string = str_replace('\"', '"', $string);
+
+        // Remove Starting and Finishing Double Quotes Added By JSON_ENCODE
+        $string = substr($string, 1, -1);
+
+        // Finish By Adding Starting and Finishing Single Quotes
+        $string = "'" . $string . "'";
+
+        return $string;
+    }
+
 }
