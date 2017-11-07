@@ -68,6 +68,7 @@ use TheDonHimself\GremlinOGM\Traversal\Step\ProgramStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\ProjectStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\PropertiesStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\PropertyMapStep;
+use TheDonHimself\GremlinOGM\Traversal\Step\PropertyStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\RangeStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\RepeatStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\SackStep;
@@ -79,6 +80,13 @@ use TheDonHimself\GremlinOGM\Traversal\Step\StoreStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\SubgraphStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\SumStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\TailStep;
+use TheDonHimself\GremlinOGM\Traversal\Step\TerminalStep\FillStep;
+use TheDonHimself\GremlinOGM\Traversal\Step\TerminalStep\HasNextStep;
+use TheDonHimself\GremlinOGM\Traversal\Step\TerminalStep\NextStep;
+use TheDonHimself\GremlinOGM\Traversal\Step\TerminalStep\ToBulkSetStep;
+use TheDonHimself\GremlinOGM\Traversal\Step\TerminalStep\ToListStep;
+use TheDonHimself\GremlinOGM\Traversal\Step\TerminalStep\ToSetStep;
+use TheDonHimself\GremlinOGM\Traversal\Step\TerminalStep\TryNextStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\TimeLimitStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\TimesStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\ToStep;
@@ -178,6 +186,35 @@ class TraversalBuilder
     /**
      * @return Traversal
      */
+    public function addProperty(...$args)
+    {
+        $traversal = $this->traversal;
+
+        if (isset($args[0]) && $args[0] instanceof self) {
+            $inner_traversal = $args[0]->getTraversal();
+
+            $addProperty_traversal = '.addProperty('.$inner_traversal.')';
+
+            $new_traversal = $traversal.$addProperty_traversal;
+
+            $this->traversal = $new_traversal;
+
+            return $this;
+        }
+
+        $addProperty = new AddPropertyStep($args);
+        $addProperty_traversal = $addProperty->__toString();
+
+        $new_traversal = $traversal.$addProperty_traversal;
+
+        $this->traversal = $new_traversal;
+
+        return $this;
+    }
+
+    /**
+     * @return Traversal
+     */
     public function property(...$args)
     {
         $traversal = $this->traversal;
@@ -194,7 +231,7 @@ class TraversalBuilder
             return $this;
         }
 
-        $property = new AddPropertyStep($args);
+        $property = new PropertyStep($args);
         $property_traversal = $property->__toString();
 
         $new_traversal = $traversal.$property_traversal;
@@ -2070,6 +2107,125 @@ class TraversalBuilder
         $without_traversal = $without->__toString();
 
         $new_traversal = $traversal.$without_traversal;
+
+        $this->traversal = $new_traversal;
+
+        return $this;
+    }
+
+    /**
+     * @return Traversal
+     */
+    public function fill(...$args)
+    {
+        $traversal = $this->traversal;
+
+        $fill = new FillStep($args);
+        $fill_traversal = $fill->__toString();
+
+        $new_traversal = $traversal.$fill_traversal;
+
+        $this->traversal = $new_traversal;
+
+        return $this;
+    }
+
+    /**
+     * @return Traversal
+     */
+    public function hasNext(...$args)
+    {
+        $traversal = $this->traversal;
+
+        $hasNext = new HasNextStep($args);
+        $hasNext_traversal = $hasNext->__toString();
+
+        $new_traversal = $traversal.$hasNext_traversal;
+
+        $this->traversal = $new_traversal;
+
+        return $this;
+    }
+
+    /**
+     * @return Traversal
+     */
+    public function next(...$args)
+    {
+        $traversal = $this->traversal;
+
+        $next = new NextStep($args);
+        $next_traversal = $next->__toString();
+
+        $new_traversal = $traversal.$next_traversal;
+
+        $this->traversal = $new_traversal;
+
+        return $this;
+    }
+
+    /**
+     * @return Traversal
+     */
+    public function toBulkSet(...$args)
+    {
+        $traversal = $this->traversal;
+
+        $toBulkSet = new ToBulkSetStep($args);
+        $toBulkSet_traversal = $toBulkSet->__toString();
+
+        $new_traversal = $traversal.$toBulkSet_traversal;
+
+        $this->traversal = $new_traversal;
+
+        return $this;
+    }
+
+    /**
+     * @return Traversal
+     */
+    public function toList(...$args)
+    {
+        $traversal = $this->traversal;
+
+        $toList = new ToListStep($args);
+        $toList_traversal = $toList->__toString();
+
+        $new_traversal = $traversal.$toList_traversal;
+
+        $this->traversal = $new_traversal;
+
+        return $this;
+    }
+
+    /**
+     * @return Traversal
+     */
+    public function toSet(...$args)
+    {
+        $traversal = $this->traversal;
+
+        $toSet = new ToSetStep($args);
+        $toSet_traversal = $toSet->__toString();
+
+        $new_traversal = $traversal.$toSet_traversal;
+
+        $this->traversal = $new_traversal;
+
+        return $this;
+    }
+
+    /**
+     * @return Traversal
+     */
+    public function tryNext(...$args)
+    {
+        $traversal = $this->traversal;
+
+        $tryNext = new TryNextStep($args);
+        $tryNext_traversal = $tryNext->__toString();
+
+        $new_traversal = $traversal.$tryNext_traversal;
 
         $this->traversal = $new_traversal;
 

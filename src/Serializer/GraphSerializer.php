@@ -145,6 +145,20 @@ class GraphSerializer
                     continue;
                 }
 
+                if ('_hash_map' === $value_key) {
+                    $mapCollection = $this->toCollection($value_value);
+
+                    if ($mapCollection) {
+                        $value_value = "new HashMap([ $mapCollection ])";
+                    } else {
+                        $value_value = 'null';
+                    }
+
+                    $string_array[] = "'$key'";
+                    $string_array[] = $value_value;
+                    continue;
+                }
+
                 if (is_object($value_value)) {
                     throw new UnserializableException($value_key, 'Cannot Serialize Objects To String Please Convert To Array First');
                 }
@@ -282,6 +296,19 @@ class GraphSerializer
                     continue;
                 }
 
+                if ('_hash_map' === $value_key) {
+                    $mapCollection = $this->toCollection($value_value);
+
+                    if ($mapCollection) {
+                        $value_value = "new HashMap([ $mapCollection ])";
+                    } else {
+                        $value_value = 'null';
+                    }
+
+                    $string_array[] = ".property('$key',$value_value)";
+                    continue;
+                }
+
                 if (is_object($value_value)) {
                     throw new UnserializableException($value_key, 'Cannot Serialize Objects To String Please Convert To Array First');
                 }
@@ -416,6 +443,20 @@ class GraphSerializer
                     continue;
                 }
 
+                if ('_hash_map' === $value_key) {
+                    $mapCollection = $this->toCollection($value_value);
+
+                    if ($mapCollection) {
+                        $value_value = "new HashMap([ $mapCollection ])";
+                    } else {
+                        $value_value = 'null';
+                    }
+
+                    $string_array[] = "'$key'";
+                    $string_array[] = $value_value;
+                    continue;
+                }
+
                 if (is_object($value_value)) {
                     throw new UnserializableException($value_key, 'Cannot Serialize Objects To String Please Convert To Array First');
                 }
@@ -528,7 +569,6 @@ class GraphSerializer
 
     public function interchangeSlashes(string $string)
     {
-        $string = json_encode($string, JSON_UNESCAPED_SLASHES);
         // Interchange Double Quotes For Single Quotes
 
         // Start By Adding Slashes To All Existing Single Quotes
@@ -541,9 +581,8 @@ class GraphSerializer
         $string = substr($string, 1, -1);
 
         // Finish By Adding Starting and Finishing Single Quotes
-        $string = "'" . $string . "'";
+        $string = "'".$string."'";
 
         return $string;
     }
-
 }
