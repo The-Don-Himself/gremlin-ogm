@@ -61,7 +61,7 @@ class BaseStep
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function count()
     {

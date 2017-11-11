@@ -21,7 +21,7 @@ class Vertex
     /**
      * Reference : http://docs.janusgraph.org/latest/advanced-schema.html#_static_vertices.
      *
-     * @var boolean
+     * @var bool
      */
     public $static = false;
 

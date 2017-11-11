@@ -31,7 +31,7 @@ class Edge
     /**
      * Reference : http://docs.janusgraph.org/latest/advanced-schema.html#_unidirected_edges.
      *
-     * @var boolean
+     * @var bool
      */
     public $unidirected = false;
 
