@@ -51,12 +51,12 @@ Again these are just proxies to the underlying brightzone/gremlin-php library, s
 
 #### Current Tested Vendors:
 
--[x] JanusGraph Self-Hosted
--[x] JanusGraph Compose
--[] IBM Graph
--[] Neo4j
--[] Azure Cosmos DB
--[] Datastax Enterprise Graph
+- [x] JanusGraph Self-Hosted
+- [x] JanusGraph Compose
+- [ ] IBM Graph
+- [ ] Neo4j
+- [ ] Azure Cosmos DB
+- [ ] Datastax Enterprise Graph
 
 To tell the of a specific vendor extend the options array as shown for self-hosted
 
