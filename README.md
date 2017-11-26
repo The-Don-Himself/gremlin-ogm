@@ -52,7 +52,7 @@ Again these are just proxies to the underlying brightzone/gremlin-php library, s
 #### Current Tested Vendors:
 
 - [x] JanusGraph Self-Hosted
-- [x] JanusGraph Compose
+- [x] JanusGraph on Compose
 - [ ] IBM Graph
 - [ ] Neo4j
 - [ ] Azure Cosmos DB
