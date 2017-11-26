@@ -10,15 +10,15 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TheDonHimself\GremlinOGM\GraphConnection;
 
-class VertexesDeleteCommand extends Command
+class EdgesDropCommand extends Command
 {
     protected function configure()
     {
         $this
-            ->setName('twittergraph:vertexes:delete')
-            ->setDescription('TwitterGraph Delete Vertexes')
+            ->setName('twittergraph:edges:drop')
+            ->setDescription('TwitterGraph Drop Edges')
             ->addOption('configPath', null, InputOption::VALUE_OPTIONAL, 'The Path to the JSON Configuration FIle')
-            ->addOption('label', null, InputOption::VALUE_OPTIONAL, 'The Vertex label to be deleted');
+            ->addOption('label', null, InputOption::VALUE_OPTIONAL, 'The Edge label to be deleted');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -38,9 +38,9 @@ class VertexesDeleteCommand extends Command
         $label = $input->getOption('label');
 
         if ($label) {
-            $gremlin_command = 'g.V().hasLabel("'.$label.'").drop().iterate();';
+            $gremlin_command = 'g.E().hasLabel("'.$label.'").drop().iterate();';
         } else {
-            $gremlin_command = 'g.V().drop().iterate();';
+            $gremlin_command = 'g.E().drop().iterate();';
         }
 
         if ($vendor) {
@@ -62,7 +62,7 @@ class VertexesDeleteCommand extends Command
             return;
         }
 
-        $output->writeln('Dropping All Vertexes');
+        $output->writeln('Dropping All Edges');
 
         try {
             $graph_connection->send($gremlin_command);
@@ -74,6 +74,6 @@ class VertexesDeleteCommand extends Command
 
         $graph_connection->close();
 
-        $output->writeln('All Vertexes Dropped Successfully!');
+        $output->writeln('All Edges Dropped Successfully!');
     }
 }

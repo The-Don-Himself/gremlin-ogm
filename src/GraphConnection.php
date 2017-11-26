@@ -7,9 +7,24 @@ use Brightzone\GremlinDriver\Connection;
 class GraphConnection
 {
     /**
+     * @var \Brightzone\GremlinDriver\Connection
+     */
+    private $connection;
+
+    /**
      * @var array contains the options to connect to the database with
      */
-    public $options = [];
+    private $options = [];
+
+    /**
+     * @var array contains the twitter app credentials for sample Twitter Graph
+     */
+    private $twitter = [];
+
+    /**
+     * @var array contains the vendor options to cater for different implementations
+     */
+    private $vendor = [];
 
     public function __construct($options = [])
     {
@@ -23,6 +38,16 @@ class GraphConnection
             $options['timeout'] = 5;
         }
 
+        if (isset($options['twitter'])) {
+            $this->twitter = $options['twitter'];
+            unset($options['twitter']);
+        }
+
+        if (isset($options['vendor'])) {
+            $this->vendor = $options['vendor'];
+            unset($options['vendor']);
+        }
+
         $this->options = $options;
     }
 
@@ -32,6 +57,27 @@ class GraphConnection
 
         $db = new Connection($options);
 
-        return $db;
+        $this->connection = $db;
+    }
+
+    public function getConnection()
+    {
+        $connection = $this->connection;
+
+        return $connection;
+    }
+
+    public function getTwitter()
+    {
+        $twitter = $this->twitter;
+
+        return $twitter;
+    }
+
+    public function getVendor()
+    {
+        $vendor = $this->vendor;
+
+        return $vendor;
     }
 }
