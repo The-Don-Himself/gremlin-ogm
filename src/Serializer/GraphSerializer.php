@@ -564,10 +564,72 @@ class GraphSerializer
         }
 
         $properties = $this->toArray($object);
-        $properties_string = $this->toString($properties);
-        if ($properties_string) {
-            $properties_string = ', '.$properties_string;
+        $properties_string = $this->toPropertyString($properties);
+
+        $add_edge_from_vertex = "g.V().hasLabel(b.of('from_vertex_label', from_vertex_label)).has('$from_vertex_key', b.of('$from_vertex_key', $from_vertex_value))";
+        $add_edge_to_vertex = "g.V().hasLabel(b.of('to_vertex_label', to_vertex_label)).has('$to_vertex_key', b.of('$to_vertex_key', $to_vertex_value))";
+
+        return "b = new Bindings(); from_vertex_label = '$from_vertex_label'; to_vertex_label = '$to_vertex_label'; edge_label = '$edge_label'; $add_edge_from_vertex.addE(b.of('edge_label', edge_label)).to($add_edge_to_vertex)$properties_string;";
+    }
+
+    public function toEdgeCheckFirst(string $edge_label, array $from_vertex, array $to_vertex, $object)
+    {
+        $from_vertex_label = $from_vertex['label'];
+        $from_vertex_key = $from_vertex['uniquePropertyKey'];
+        $from_vertex_value_methods = $from_vertex['methodsForKeyValue'];
+
+        $to_vertex_label = $to_vertex['label'];
+        $to_vertex_key = $to_vertex['uniquePropertyKey'];
+        $to_vertex_value_methods = $to_vertex['methodsForKeyValue'];
+
+        $continue = false;
+
+        $from_vertex_value = $object;
+        foreach ($from_vertex_value_methods as $method) {
+            $from_vertex_value = call_user_func(array($from_vertex_value, $method));
+            if (!$from_vertex_value) {
+                $continue = true;
+                break;
+            }
         }
+
+        if (true === $continue) {
+            return;
+        }
+
+        if (is_string($from_vertex_value)) {
+            $from_vertex_value = json_encode($from_vertex_value, JSON_UNESCAPED_SLASHES);
+            $from_vertex_value = $this->interchangeQuotes($from_vertex_value);
+        }
+
+        if (is_bool($from_vertex_value)) {
+            $from_vertex_value = $from_vertex_value ? 'true' : 'false';
+        }
+
+        $to_vertex_value = $object;
+        foreach ($to_vertex_value_methods as $method) {
+            $to_vertex_value = call_user_func(array($to_vertex_value, $method));
+            if (!$from_vertex_value) {
+                $continue = true;
+                break;
+            }
+        }
+
+        if (true === $continue) {
+            return;
+        }
+
+        if (is_string($to_vertex_value)) {
+            $to_vertex_value = json_encode($to_vertex_value, JSON_UNESCAPED_SLASHES);
+            $to_vertex_value = $this->interchangeQuotes($to_vertex_value);
+        }
+
+        if (is_bool($to_vertex_value)) {
+            $to_vertex_value = $to_vertex_value ? 'true' : 'false';
+        }
+
+        $properties = $this->toArray($object);
+        $properties_string = $this->toPropertyString($properties);
 
         $add_edge_from_vertex = "g.V().hasLabel(b.of('from_vertex_label', from_vertex_label)).has('$from_vertex_key', b.of('$from_vertex_key', $from_vertex_value))";
         $add_edge_to_vertex = "g.V().hasLabel(b.of('to_vertex_label', to_vertex_label)).has('$to_vertex_key', b.of('$to_vertex_key', $to_vertex_value))";
