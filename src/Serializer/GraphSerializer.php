@@ -49,9 +49,13 @@ class GraphSerializer
                 $value = $value ? 'true' : 'false';
             }
 
+            if (is_float($value) || is_double($value)) {
+                $value = 'new Double('.$value.')';
+            }
+
             if (!is_array($value)) {
                 $string_array[] = "'$key'";
-                $string_array[] = "$value";
+                $string_array[] = "b.of('$key', $value)";
                 continue;
             }
 
@@ -67,7 +71,7 @@ class GraphSerializer
                     }
 
                     $string_array[] = "'$key'";
-                    $string_array[] = $value_value;
+                    $string_array[] = "b.of('$key', $value_value)";
                     continue;
                 }
 
@@ -82,7 +86,7 @@ class GraphSerializer
                     }
 
                     $string_array[] = "'$key'";
-                    $string_array[] = $value_value;
+                    $string_array[] = "b.of('$key', $value_value)";
                     continue;
                 }
 
@@ -99,7 +103,7 @@ class GraphSerializer
                     }
 
                     $string_array[] = "'$key'";
-                    $string_array[] = $value_value;
+                    $string_array[] = "b.of('$key', $value_value)";
                     continue;
                 }
 
@@ -155,7 +159,7 @@ class GraphSerializer
                     }
 
                     $string_array[] = "'$key'";
-                    $string_array[] = $value_value;
+                    $string_array[] = "b.of('$key', $value_value)";
                     continue;
                 }
 
@@ -177,7 +181,7 @@ class GraphSerializer
                 }
 
                 $string_array[] = "'$key'";
-                $string_array[] = "$value_value";
+                $string_array[] = "b.of('$key', $value_value)";
             }
         }
 
@@ -204,8 +208,12 @@ class GraphSerializer
                 $value = $value ? 'true' : 'false';
             }
 
+            if (is_float($value) || is_double($value)) {
+                $value = 'new Double('.$value.')';
+            }
+
             if (!is_array($value)) {
-                $string_array[] = ".property('$key',$value)";
+                $string_array[] = ".property('$key', b.of('$key', $value))";
                 continue;
             }
 
@@ -220,7 +228,7 @@ class GraphSerializer
                         $value_value = 'null';
                     }
 
-                    $string_array[] = ".property('$key',$value_value)";
+                    $string_array[] = ".property('$key', b.of('$key', $value_value))";
                     continue;
                 }
 
@@ -234,7 +242,7 @@ class GraphSerializer
                         $value_value = 'null';
                     }
 
-                    $string_array[] = ".property('$key',$value_value)";
+                    $string_array[] = ".property('$key', b.of('$key', $value_value))";
                     continue;
                 }
 
@@ -250,7 +258,7 @@ class GraphSerializer
                         $value_value = 'null';
                     }
 
-                    $string_array[] = ".property('$key',$value_value)";
+                    $string_array[] = ".property('$key', b.of('$key', $value_value))";
                     continue;
                 }
 
@@ -305,7 +313,7 @@ class GraphSerializer
                         $value_value = 'null';
                     }
 
-                    $string_array[] = ".property('$key',$value_value)";
+                    $string_array[] = ".property('$key', b.of('$key', $value_value))";
                     continue;
                 }
 
@@ -326,7 +334,7 @@ class GraphSerializer
                     throw new UnserializableException($key, 'It Is Currently Not Possible To Stringify Multidimensional Arrays, Pull Requests Are Welcome To Do So');
                 }
 
-                $string_array[] = ".property('$key',$value_value)";
+                $string_array[] = ".property('$key', b.of('$key', $value_value))";
             }
         }
 
@@ -489,11 +497,11 @@ class GraphSerializer
         $label = key($array);
         $vertex_properties = current($array);
 
-        $string = $this->toString($vertex_properties);
-        if ($string) {
-            $command = "g.addV(label, '$label', $string);";
+        $propertyString = $this->toPropertyString($vertex_properties);
+        if ($propertyString) {
+            $command = "b = new Bindings(); add_label = '$label'; g.addV(b.of('add_label', add_label))$propertyString;";
         } else {
-            $command = "g.addV(label, '$label');";
+            $command = "b = new Bindings(); add_label = '$label'; g.addV(b.of('add_label', add_label));";
         }
 
         return $command;
@@ -561,10 +569,10 @@ class GraphSerializer
             $properties_string = ', '.$properties_string;
         }
 
-        $add_edge_from_vertex = "g.V().hasLabel('$from_vertex_label').has('$from_vertex_key', $from_vertex_value)";
-        $add_edge_to_vertex = "g.V().hasLabel('$to_vertex_label').has('$to_vertex_key', $to_vertex_value)";
+        $add_edge_from_vertex = "g.V().hasLabel(b.of('from_vertex_label', from_vertex_label)).has('$from_vertex_key', b.of('$from_vertex_key', $from_vertex_value))";
+        $add_edge_to_vertex = "g.V().hasLabel(b.of('to_vertex_label', to_vertex_label)).has('$to_vertex_key', b.of('$to_vertex_key', $to_vertex_value))";
 
-        return "if ($add_edge_from_vertex.hasNext() == true && $add_edge_to_vertex.hasNext() == true) { $add_edge_from_vertex.next().addEdge('$edge_label', $add_edge_to_vertex.next()$properties_string) };";
+        return "b = new Bindings(); from_vertex_label = '$from_vertex_label'; to_vertex_label = '$to_vertex_label'; edge_label = '$edge_label'; if ($add_edge_from_vertex.hasNext() == true && $add_edge_to_vertex.hasNext() == true) { $add_edge_from_vertex.next().addEdge(b.of('edge_label', edge_label), $add_edge_to_vertex.next()$properties_string) };";
     }
 
     public function interchangeQuotes(string $string)

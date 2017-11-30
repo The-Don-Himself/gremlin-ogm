@@ -4,7 +4,7 @@ A PHP Object Graph Mapper for Tinkerpop 3+ compatible Graph Databases (JanusGrap
 Check out the TwitterGraph folder for an elaborate example of how to use gremlin-ogm to graph Twitter in a Graph Database.
 
 
-##### Note: Still a work in progress. I'm progressively open sourcing the code I use in production with JanusGraph. Currently, only a small percentage is my own stuff while the rest using code from the dev-master branch. Once I can run 100% of this library, I will release the first stable version. If you use Symfony, then there's a bundle I'm finishing on that will allow you to map Doctrine ORM entities from a compatible RDBMS database as well as Doctrine ODM documents from MongoDB to a Graph Database.
+##### Note: Still a work in progress. I'm progressively open sourcing the code I use in production with JanusGraph. Currently, only a small percentage is my own stuff while the rest using code from the dev-master branch. Once I can run 100% off this library, I will release the first stable version 0.0.1. If you use Symfony, then there's a bundle I'm working on that will allow you to map Doctrine ORM entities from a compatible RDBMS database as well as Doctrine ODM documents from MongoDB to a Graph Database.
 
 
 ## Usage
