@@ -57,6 +57,7 @@ Again these are just proxies to the underlying brightzone/gremlin-php library, s
 - [x] JanusGraph on Compose
 - [x] JanusGraph Self-Hosted
 - [ ] Neo4j
+- [ ] OrientDB
 
 To tell the of a specific vendor extend the options array as shown for self-hosted
 

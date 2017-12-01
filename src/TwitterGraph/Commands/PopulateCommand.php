@@ -242,13 +242,13 @@ class PopulateCommand extends Command
 
             if (Follows::class === $_phpclass) {
                 foreach ($followers_edges as $followers_edge) {
-                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $followers_edge);
+                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $followers_edge, true);
                     if ($command) {
                         $edge_commands[] = $command;
                     }
                 }
                 foreach ($friends_edges as $friends_edge) {
-                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $friends_edge);
+                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $friends_edge, true);
                     if ($command) {
                         $edge_commands[] = $command;
                     }
@@ -256,7 +256,7 @@ class PopulateCommand extends Command
             }
             if (Likes::class === $_phpclass) {
                 foreach ($likes_edges as $likes_edge) {
-                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $likes_edge);
+                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $likes_edge, true);
                     if ($command) {
                         $edge_commands[] = $command;
                     }
@@ -264,7 +264,7 @@ class PopulateCommand extends Command
             }
             if (Retweets::class === $_phpclass) {
                 foreach ($retweets_edges as $retweets_edge) {
-                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $retweets_edge);
+                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $retweets_edge, true);
                     if ($command) {
                         $edge_commands[] = $command;
                     }
@@ -272,7 +272,7 @@ class PopulateCommand extends Command
             }
             if (Tweeted::class === $_phpclass) {
                 foreach ($tweeted_edges as $tweeted_edge) {
-                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $tweeted_edge);
+                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $tweeted_edge, true);
                     if ($command) {
                         $edge_commands[] = $command;
                     }
