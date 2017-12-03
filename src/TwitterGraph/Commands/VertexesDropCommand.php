@@ -52,7 +52,8 @@ class VertexesDropCommand extends Command
             }
         }
 
-        $graph_connection = (new GraphConnection($options))->init();
+        $graph = (new GraphConnection($options))->init();
+        $graph_connection = $graph->getConnection();
 
         try {
             $graph_connection->open();

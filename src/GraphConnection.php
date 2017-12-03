@@ -58,6 +58,8 @@ class GraphConnection
         $db = new Connection($options);
 
         $this->connection = $db;
+
+        return $this;
     }
 
     public function getConnection()

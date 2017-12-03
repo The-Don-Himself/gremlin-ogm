@@ -283,7 +283,8 @@ class PopulateCommand extends Command
         // Now We have all the vertex and edges commands, let's send them
         // But first we establish a Graph connection
 
-        $graph_connection = (new GraphConnection($options))->init();
+        $graph = (new GraphConnection($options))->init();
+        $graph_connection = $graph->getConnection();
 
         try {
             $graph_connection->open();
