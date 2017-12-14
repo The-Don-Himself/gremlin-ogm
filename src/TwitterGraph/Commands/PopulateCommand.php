@@ -38,7 +38,9 @@ class PopulateCommand extends Command
             ->setName('twittergraph:populate')
             ->setDescription('TwitterGraph Populate')
             ->addArgument('handle', InputArgument::REQUIRED, 'The Twitter Handle to Populate')
-            ->addOption('configPath', null, InputOption::VALUE_OPTIONAL, 'The Path to the JSON Configuration FIle');
+            ->addOption('configPath', null, InputOption::VALUE_OPTIONAL, 'The Path to the JSON Configuration FIle')
+            ->addOption('dryRun', null, InputOption::VALUE_OPTIONAL, 'Whether to execute the commands or not', false)
+            ->addOption('debugPath', null, InputOption::VALUE_OPTIONAL, 'The Path to dump all commands sent to Gremlin Server', null);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -47,6 +49,7 @@ class PopulateCommand extends Command
 
         $twitter_handle = $input->getArgument('handle');
         $configPath = $input->getOption('configPath');
+        $dryRun = (bool) $input->getOption('dryRun');
 
         $options = array();
         $twitter = array();
@@ -57,7 +60,7 @@ class PopulateCommand extends Command
             $config = json_decode($configFile, true);
             $options = $config['options'];
             $twitter = $config['twitter'];
-            $vendor = isset($config['vendor']) ? $config['vendor'] : array();
+            $vendor = $config['vendor'] ?? array();
         }
 
         // Twitter Credentials Defaults
@@ -193,6 +196,18 @@ class PopulateCommand extends Command
 
         // Now, let's serialize them into actual gremlin commands
 
+        $use_bindings = true;
+
+        if ($vendor) {
+            $vendor_name = $vendor['name'];
+            if ('compose' === $vendor_name) {
+                $use_bindings = false;
+            }
+            if ('azure' === $vendor_name) {
+                $use_bindings = false;
+            }
+        }
+
         $vertex_commands = array();
 
         $label = 'users';
@@ -200,7 +215,7 @@ class PopulateCommand extends Command
             $vertex_array = array(
                 $label => $user_array,
             );
-            $command = $graph_serializer->toVertex($vertex_array);
+            $command = $graph_serializer->toVertex($vertex_array, $use_bindings);
             if ($command) {
                 $vertex_commands[] = $command;
             }
@@ -211,7 +226,7 @@ class PopulateCommand extends Command
             $vertex_array = array(
                 $label => $tweet_array,
             );
-            $command = $graph_serializer->toVertex($vertex_array);
+            $command = $graph_serializer->toVertex($vertex_array, $use_bindings);
             if ($command) {
                 $vertex_commands[] = $command;
             }
@@ -242,13 +257,13 @@ class PopulateCommand extends Command
 
             if (Follows::class === $_phpclass) {
                 foreach ($followers_edges as $followers_edge) {
-                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $followers_edge, true);
+                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $followers_edge, $use_bindings);
                     if ($command) {
                         $edge_commands[] = $command;
                     }
                 }
                 foreach ($friends_edges as $friends_edge) {
-                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $friends_edge, true);
+                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $friends_edge, $use_bindings);
                     if ($command) {
                         $edge_commands[] = $command;
                     }
@@ -256,7 +271,7 @@ class PopulateCommand extends Command
             }
             if (Likes::class === $_phpclass) {
                 foreach ($likes_edges as $likes_edge) {
-                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $likes_edge, true);
+                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $likes_edge, $use_bindings);
                     if ($command) {
                         $edge_commands[] = $command;
                     }
@@ -264,7 +279,7 @@ class PopulateCommand extends Command
             }
             if (Retweets::class === $_phpclass) {
                 foreach ($retweets_edges as $retweets_edge) {
-                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $retweets_edge, true);
+                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $retweets_edge, $use_bindings);
                     if ($command) {
                         $edge_commands[] = $command;
                     }
@@ -272,7 +287,7 @@ class PopulateCommand extends Command
             }
             if (Tweeted::class === $_phpclass) {
                 foreach ($tweeted_edges as $tweeted_edge) {
-                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $tweeted_edge, true);
+                    $command = $graph_serializer->toEdge($label, $from_vertex, $to_vertex, $tweeted_edge, $use_bindings);
                     if ($command) {
                         $edge_commands[] = $command;
                     }
@@ -280,19 +295,7 @@ class PopulateCommand extends Command
             }
         }
 
-        // Now We have all the vertex and edges commands, let's send them
-        // But first we establish a Graph connection
-
-        $graph = (new GraphConnection($options))->init();
-        $graph_connection = $graph->getConnection();
-
-        try {
-            $graph_connection->open();
-        } catch (InternalException $e) {
-            $output->writeln($e->getMessage());
-
-            return;
-        }
+        $vendor_commands = array();
 
         if ($vendor) {
             $vendor_name = $vendor['name'];
@@ -301,31 +304,65 @@ class PopulateCommand extends Command
             if ('compose' === $vendor_name) {
                 $command_string = 'def graph = ConfiguredGraphFactory.open("'.$graph_name.'"); def g = graph.traversal(); null;';
 
-                $graph_connection->send($command_string, 'session');
+                $vendor_commands[] = $command_string;
+            }
+        }
+
+        // Now We have all the vertex and edges commands, let's send them
+        // But first we establish a Graph connection
+
+        if (false === $dryRun) {
+            $graph = (new GraphConnection($options))->init();
+            $graph_connection = $graph->getConnection();
+
+            try {
+                $graph_connection->open();
+            } catch (InternalException $e) {
+                $output->writeln($e->getMessage());
+
+                return;
+            }
+
+            foreach ($vendor_commands as $command) {
+                $graph_connection->send($command, 'session');
             }
         }
 
         $output->writeln('Creating Vertexes...');
 
-        $graph_connection->transaction(function (&$graph_connection, $vertex_commands) {
-            foreach ($vertex_commands as $command) {
-                $graph_connection->send($command);
-            }
-        }, [&$graph_connection, $vertex_commands]);
+        if (false === $dryRun) {
+            $graph_connection->transaction(function (&$graph_connection, $vertex_commands) {
+                foreach ($vertex_commands as $command) {
+                    $graph_connection->send($command);
+                }
+            }, [&$graph_connection, $vertex_commands]);
+        }
 
         $output->writeln('Done! '.count($vertex_commands).' Vertexes Created');
 
         $output->writeln('Creating Edges...');
 
-        $graph_connection->transaction(function (&$graph_connection, $edge_commands) {
-            foreach ($edge_commands as $command) {
-                $graph_connection->send($command);
-            }
-        }, [&$graph_connection, $edge_commands]);
+        if (false === $dryRun) {
+            $graph_connection->transaction(function (&$graph_connection, $edge_commands) {
+                foreach ($edge_commands as $command) {
+                    $graph_connection->send($command);
+                }
+            }, [&$graph_connection, $edge_commands]);
+        }
 
-        $graph_connection->close();
+        if (false === $dryRun) {
+            $graph_connection->close();
+        }
 
         $output->writeln('Done! '.count($edge_commands).' Edges Created');
+
+        if (true === $dryRun) {
+            $all_commands = array_merge($vendor_commands, $vertex_commands, $edge_commands);
+            $results = implode(PHP_EOL, $all_commands);
+            $debugPath = $input->getOption('debugPath') ?? null;
+            $dumpResultsPath = realpath($debugPath);
+            file_put_contents($dumpResultsPath.'/commands.txt', $results);
+        }
 
         $output->writeln('Graph Populated Successfully!');
     }

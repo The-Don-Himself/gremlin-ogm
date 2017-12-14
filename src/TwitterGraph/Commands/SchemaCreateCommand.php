@@ -19,7 +19,9 @@ class SchemaCreateCommand extends Command
         $this
             ->setName('twittergraph:schema:create')
             ->setDescription('TwitterGraph Schema Create')
-            ->addOption('configPath', null, InputOption::VALUE_OPTIONAL, 'The Path to the JSON Configuration FIle');
+            ->addOption('configPath', null, InputOption::VALUE_OPTIONAL, 'The Path to the JSON Configuration FIle')
+            ->addOption('dryRun', null, InputOption::VALUE_OPTIONAL, 'Whether to execute the commands or not', false)
+            ->addOption('debugPath', null, InputOption::VALUE_OPTIONAL, 'The Path to dump all commands sent to Gremlin Server', null);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -39,7 +41,7 @@ class SchemaCreateCommand extends Command
             $configFile = file_get_contents($configPath);
             $config = json_decode($configFile, true);
             $options = $config['options'];
-            $vendor = isset($config['vendor']) ? $config['vendor'] : array();
+            $vendor = $config['vendor'] ?? array();
         }
 
         $graph = (new GraphConnection($options))->init();

@@ -51,7 +51,7 @@ Again these are just proxies to the underlying brightzone/gremlin-php library, s
 
 #### Current Tested Vendors:
 
-- [ ] Azure Cosmos DB
+- [x] Azure Cosmos DB
 - [ ] Datastax Enterprise Graph
 - [ ] IBM Graph
 - [x] JanusGraph on Compose
@@ -84,13 +84,26 @@ $options = [
       'name' => 'compose', 
       'graph' => 'twitter',
       'database' => 'janusgraph', 
-      'version' => '0.1'
+      'version' => '0.11'
     ],
 ....
 ];
 ````
 
-Vendor array information can now be gotten under
+An example configuration for CosmosDB on Azure would look like this.
+
+````
+$options = [
+....
+    'vendor' = [ 
+      'name' => 'azure', 
+      'database' => 'cosmosdb'
+    ],
+....
+];
+````
+
+Vendor information is critical to the library so as to know whether to enable certain features like [bindings](tinkerpop.apache.org/docs/current/reference/#parameterized-scripts) which is does by default and may not work in all situations. Submitted vendor information can now be gotten as an array under the graph object
 ````
 $vendor = $graph->getVendor();
 ````

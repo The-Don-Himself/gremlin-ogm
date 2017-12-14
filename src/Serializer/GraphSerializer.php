@@ -31,7 +31,7 @@ class GraphSerializer
         return $array;
     }
 
-    public function toString(array $array)
+    public function toString(array $array, $bindings = true)
     {
         $string_array = array();
 
@@ -50,12 +50,12 @@ class GraphSerializer
             }
 
             if (is_float($value) || is_double($value)) {
-                $value = 'new Double(' . $value . ')';
+                $value = 'new Double('.$value.')';
             }
 
             if (!is_array($value)) {
                 $string_array[] = "'$key'";
-                $string_array[] = "b.of('$key', $value)";
+                $string_array[] = $bindings ? "b.of('$key', $value)" : $value;
                 continue;
             }
 
@@ -71,7 +71,7 @@ class GraphSerializer
                     }
 
                     $string_array[] = "'$key'";
-                    $string_array[] = "b.of('$key', $value_value)";
+                    $string_array[] = $bindings ? "b.of('$key', $value_value)" : $value_value;
                     continue;
                 }
 
@@ -86,7 +86,7 @@ class GraphSerializer
                     }
 
                     $string_array[] = "'$key'";
-                    $string_array[] = "b.of('$key', $value_value)";
+                    $string_array[] = $bindings ? "b.of('$key', $value_value)" : $value_value;
                     continue;
                 }
 
@@ -103,12 +103,12 @@ class GraphSerializer
                     }
 
                     $string_array[] = "'$key'";
-                    $string_array[] = "b.of('$key', $value_value)";
+                    $string_array[] = $bindings ? "b.of('$key', $value_value)" : $value_value;
                     continue;
                 }
 
                 if ('_map_of' === $value_key) {
-                    $mapOf = $this->toString($value_value);
+                    $mapOf = $this->toString($value_value, $bindings);
 
                     if ($mapOf) {
                         $value_value = "Map.of($mapOf)";
@@ -136,7 +136,7 @@ class GraphSerializer
                 }
 
                 if ('_map_collection' === $value_key) {
-                    $mapCollection = $this->toCollection($value_value);
+                    $mapCollection = $this->toCollection($value_value, $bindings);
 
                     if ($mapCollection) {
                         $value_value = "[ $mapCollection ]";
@@ -150,7 +150,7 @@ class GraphSerializer
                 }
 
                 if ('_hash_map' === $value_key) {
-                    $mapCollection = $this->toCollection($value_value);
+                    $mapCollection = $this->toCollection($value_value, $bindings);
 
                     if ($mapCollection) {
                         $value_value = "new HashMap([ $mapCollection ])";
@@ -159,7 +159,7 @@ class GraphSerializer
                     }
 
                     $string_array[] = "'$key'";
-                    $string_array[] = "b.of('$key', $value_value)";
+                    $string_array[] = $bindings ? "b.of('$key', $value_value)" : $value_value;
                     continue;
                 }
 
@@ -181,7 +181,7 @@ class GraphSerializer
                 }
 
                 $string_array[] = "'$key'";
-                $string_array[] = "b.of('$key', $value_value)";
+                $string_array[] = $bindings ? "b.of('$key', $value_value)" : $value_value;
             }
         }
 
@@ -190,7 +190,7 @@ class GraphSerializer
         return $string;
     }
 
-    public function toPropertyString(array $array)
+    public function toPropertyString(array $array, $bindings = true)
     {
         $string_array = array();
 
@@ -209,11 +209,11 @@ class GraphSerializer
             }
 
             if (is_float($value) || is_double($value)) {
-                $value = 'new Double(' . $value . ')';
+                $value = 'new Double('.$value.')';
             }
 
             if (!is_array($value)) {
-                $string_array[] = ".property('$key', b.of('$key', $value))";
+                $string_array[] = $bindings ? ".property('$key', b.of('$key', $value))" : ".property('$key', $value)";
                 continue;
             }
 
@@ -228,7 +228,7 @@ class GraphSerializer
                         $value_value = 'null';
                     }
 
-                    $string_array[] = ".property('$key', b.of('$key', $value_value))";
+                    $string_array[] = $bindings ? ".property('$key', b.of('$key', $value_value))" : ".property('$key', $value_value)";
                     continue;
                 }
 
@@ -242,7 +242,7 @@ class GraphSerializer
                         $value_value = 'null';
                     }
 
-                    $string_array[] = ".property('$key', b.of('$key', $value_value))";
+                    $string_array[] = $bindings ? ".property('$key', b.of('$key', $value_value))" : ".property('$key', $value_value)";
                     continue;
                 }
 
@@ -258,12 +258,12 @@ class GraphSerializer
                         $value_value = 'null';
                     }
 
-                    $string_array[] = ".property('$key', b.of('$key', $value_value))";
+                    $string_array[] = $bindings ? ".property('$key', b.of('$key', $value_value))" : ".property('$key', $value_value)";
                     continue;
                 }
 
                 if ('_map_of' === $value_key) {
-                    $map = $this->toString($value_value);
+                    $map = $this->toString($value_value, $bindings);
 
                     if ($map) {
                         $value_value = "Map.of($map)";
@@ -291,7 +291,7 @@ class GraphSerializer
                 }
 
                 if ('_map_collection' === $value_key) {
-                    $mapCollection = $this->toCollection($value_value);
+                    $mapCollection = $this->toCollection($value_value, $bindings);
 
                     if ($mapCollection) {
                         $value_value = "[ $mapCollection ]";
@@ -305,7 +305,7 @@ class GraphSerializer
                 }
 
                 if ('_hash_map' === $value_key) {
-                    $mapCollection = $this->toCollection($value_value);
+                    $mapCollection = $this->toCollection($value_value, $bindings);
 
                     if ($mapCollection) {
                         $value_value = "new HashMap([ $mapCollection ])";
@@ -313,7 +313,7 @@ class GraphSerializer
                         $value_value = 'null';
                     }
 
-                    $string_array[] = ".property('$key', b.of('$key', $value_value))";
+                    $string_array[] = $bindings ? ".property('$key', b.of('$key', $value_value))" : ".property('$key', $value_value)";
                     continue;
                 }
 
@@ -334,7 +334,7 @@ class GraphSerializer
                     throw new UnserializableException($key, 'It Is Currently Not Possible To Stringify Multidimensional Arrays, Pull Requests Are Welcome To Do So');
                 }
 
-                $string_array[] = ".property('$key', b.of('$key', $value_value))";
+                $string_array[] = $bindings ? ".property('$key', b.of('$key', $value_value))" : ".property('$key', $value_value)";
             }
         }
 
@@ -343,7 +343,7 @@ class GraphSerializer
         return $string;
     }
 
-    public function toCollection(array $array)
+    public function toCollection(array $array, $bindings = true)
     {
         $string_array = array();
 
@@ -412,7 +412,7 @@ class GraphSerializer
                 }
 
                 if ('_map_of' === $value_key) {
-                    $mapOf = $this->toString($value_value);
+                    $mapOf = $this->toString($value_value, $bindings);
 
                     if ($mapOf) {
                         $value_value = "Map.of($mapOf)";
@@ -439,7 +439,7 @@ class GraphSerializer
                 }
 
                 if ('_map_collection' === $value_key) {
-                    $mapCollection = $this->toCollection($value_value);
+                    $mapCollection = $this->toCollection($value_value, $bindings);
 
                     if ($mapCollection) {
                         $value_value = "[ $mapCollection ]";
@@ -452,7 +452,7 @@ class GraphSerializer
                 }
 
                 if ('_hash_map' === $value_key) {
-                    $mapCollection = $this->toCollection($value_value);
+                    $mapCollection = $this->toCollection($value_value, $bindings);
 
                     if ($mapCollection) {
                         $value_value = "new HashMap([ $mapCollection ])";
@@ -492,22 +492,28 @@ class GraphSerializer
         return $string;
     }
 
-    public function toVertex(array $array)
+    public function toVertex(array $array, $bindings = true)
     {
         $label = key($array);
         $vertex_properties = current($array);
 
-        $propertyString = $this->toPropertyString($vertex_properties);
+        $propertyString = $this->toPropertyString($vertex_properties, $bindings);
         if ($propertyString) {
-            $command = "b = new Bindings(); add_label = '$label'; g.addV(b.of('add_label', add_label))$propertyString;";
+            $commandWithBindings = "b = new Bindings(); add_label = '$label'; g.addV(b.of('add_label', add_label))$propertyString;";
+            $commandWithOutBindings = "g.addV('$label')$propertyString;";
+
+            $command = $bindings ? $commandWithBindings : $commandWithOutBindings;
         } else {
-            $command = "b = new Bindings(); add_label = '$label'; g.addV(b.of('add_label', add_label));";
+            $commandWithBindings = "b = new Bindings(); add_label = '$label'; g.addV(b.of('add_label', add_label));";
+            $commandWithOutBindings = "g.addV('$label');";
+
+            $command = $bindings ? $commandWithBindings : $commandWithOutBindings;
         }
 
         return $command;
     }
 
-    public function toEdge(string $edge_label, array $from_vertex, array $to_vertex, $object, $checkFirst = false)
+    public function toEdge(string $edge_label, array $from_vertex, array $to_vertex, $object, $bindings = true)
     {
         $from_vertex_label = $from_vertex['label'];
         $from_vertex_key = $from_vertex['uniquePropertyKey'];
@@ -564,18 +570,24 @@ class GraphSerializer
         }
 
         $properties = $this->toArray($object);
-        $properties_string = $this->toPropertyString($properties);
+        $properties_string = $this->toPropertyString($properties, $bindings);
 
-        $add_edge_from_vertex = "g.V().hasLabel(b.of('from_vertex_label', from_vertex_label)).has('$from_vertex_key', b.of('$from_vertex_key', $from_vertex_value))";
-        $add_edge_to_vertex = "g.V().hasLabel(b.of('to_vertex_label', to_vertex_label)).has('$to_vertex_key', b.of('$to_vertex_key', $to_vertex_value))";
-        $add_edge_command = "$add_edge_from_vertex.addE(b.of('edge_label', edge_label)).to($add_edge_to_vertex)$properties_string";
-
-        if(true === $checkFirst){
-            return "b = new Bindings(); from_vertex_label = '$from_vertex_label'; to_vertex_label = '$to_vertex_label'; edge_label = '$edge_label'; if ($add_edge_from_vertex.hasNext() == true && $add_edge_to_vertex.hasNext() == true) { $add_edge_command };";
+        if ($bindings) {
+            $add_edge_from_vertex = "g.V().hasLabel(b.of('from_vertex_label', from_vertex_label)).has('$from_vertex_key', b.of('$from_vertex_key', $from_vertex_value))";
+            $add_edge_to_vertex = "g.V().hasLabel(b.of('to_vertex_label', to_vertex_label)).has('$to_vertex_key', b.of('$to_vertex_key', $to_vertex_value))";
+            $add_edge_command = "$add_edge_from_vertex.addE(b.of('edge_label', edge_label)).to($add_edge_to_vertex)$properties_string";
+        } else {
+            $add_edge_from_vertex = "g.V().hasLabel('$from_vertex_label').has('$from_vertex_key', $from_vertex_value)";
+            $add_edge_to_vertex = "g.V().hasLabel('$to_vertex_label').has('$to_vertex_key', $to_vertex_key)";
+            $add_edge_command = "$add_edge_from_vertex.addE('$edge_label').to($add_edge_to_vertex)$properties_string";
         }
 
-        return "b = new Bindings(); from_vertex_label = '$from_vertex_label'; to_vertex_label = '$to_vertex_label'; edge_label = '$edge_label'; $add_edge_command; ";
+        $commandWithBindings = "b = new Bindings(); from_vertex_label = '$from_vertex_label'; to_vertex_label = '$to_vertex_label'; edge_label = '$edge_label'; $add_edge_command; ";
+        $commandWithOutBindings = "$add_edge_command; ";
 
+        $command = $bindings ? $commandWithBindings : $commandWithOutBindings;
+
+        return $command;
     }
 
     public function interchangeQuotes(string $string)
