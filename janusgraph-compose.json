@@ -1,9 +1,9 @@
 {
   "options": {
-    "host": "portal-ssl.janusgraph.myapp.composedb.com", 
-    "port": 24471, 
+    "host": "portal-ssl193-33.euphoric-janusgraph-58.campus-discounts.composedb.com", 
+    "port": 26103, 
     "username": "admin", 
-    "password": "password", 
+    "password": "GOOZMRHFMDZCJBKS", 
     "ssl": { 
       "ssl": {
         "verify_peer": false,
@@ -24,6 +24,6 @@
   "vendor": {
     "name": "compose",
     "graph": "twitter",
-    "version": 0.1.1
+    "version": "0.1.1"
   }
 }
