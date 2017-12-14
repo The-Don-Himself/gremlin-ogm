@@ -499,12 +499,12 @@ class GraphSerializer
 
         $propertyString = $this->toPropertyString($vertex_properties, $bindings);
         if ($propertyString) {
-            $commandWithBindings = "b = new Bindings(); add_label = '$label'; g.addV(b.of('add_label', add_label))$propertyString;";
+            $commandWithBindings = "b = new Bindings(); g.addV(b.of('add_label', '$label'))$propertyString;";
             $commandWithOutBindings = "g.addV('$label')$propertyString;";
 
             $command = $bindings ? $commandWithBindings : $commandWithOutBindings;
         } else {
-            $commandWithBindings = "b = new Bindings(); add_label = '$label'; g.addV(b.of('add_label', add_label));";
+            $commandWithBindings = "b = new Bindings(); g.addV(b.of('add_label', '$label'));";
             $commandWithOutBindings = "g.addV('$label');";
 
             $command = $bindings ? $commandWithBindings : $commandWithOutBindings;
@@ -573,16 +573,16 @@ class GraphSerializer
         $properties_string = $this->toPropertyString($properties, $bindings);
 
         if ($bindings) {
-            $add_edge_from_vertex = "g.V().hasLabel(b.of('from_vertex_label', from_vertex_label)).has('$from_vertex_key', b.of('$from_vertex_key', $from_vertex_value))";
-            $add_edge_to_vertex = "g.V().hasLabel(b.of('to_vertex_label', to_vertex_label)).has('$to_vertex_key', b.of('$to_vertex_key', $to_vertex_value))";
-            $add_edge_command = "$add_edge_from_vertex.addE(b.of('edge_label', edge_label)).to($add_edge_to_vertex)$properties_string";
+            $add_edge_from_vertex = "g.V().hasLabel(b.of('from_vertex_label', '$from_vertex_label')).has('$from_vertex_key', b.of('$from_vertex_key', $from_vertex_value))";
+            $add_edge_to_vertex = "g.V().hasLabel(b.of('to_vertex_label', '$to_vertex_label')).has('$to_vertex_key', b.of('$to_vertex_key', $to_vertex_value))";
+            $add_edge_command = "$add_edge_from_vertex.addE(b.of('edge_label', '$edge_label')).to($add_edge_to_vertex)$properties_string";
         } else {
             $add_edge_from_vertex = "g.V().hasLabel('$from_vertex_label').has('$from_vertex_key', $from_vertex_value)";
             $add_edge_to_vertex = "g.V().hasLabel('$to_vertex_label').has('$to_vertex_key', $to_vertex_key)";
             $add_edge_command = "$add_edge_from_vertex.addE('$edge_label').to($add_edge_to_vertex)$properties_string";
         }
 
-        $commandWithBindings = "b = new Bindings(); from_vertex_label = '$from_vertex_label'; to_vertex_label = '$to_vertex_label'; edge_label = '$edge_label'; $add_edge_command; ";
+        $commandWithBindings = "b = new Bindings(); $add_edge_command; ";
         $commandWithOutBindings = "$add_edge_command; ";
 
         $command = $bindings ? $commandWithBindings : $commandWithOutBindings;
