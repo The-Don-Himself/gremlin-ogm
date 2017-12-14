@@ -1,9 +1,9 @@
 {
   "options": {
-    "host": "portal-ssl193-33.euphoric-janusgraph-58.campus-discounts.composedb.com", 
-    "port": 26103, 
+    "host": "portal.janusgraph.my-app.composedb.com", 
+    "port": 12345, 
     "username": "admin", 
-    "password": "GOOZMRHFMDZCJBKS", 
+    "password": "password", 
     "ssl": { 
       "ssl": {
         "verify_peer": false,
