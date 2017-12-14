@@ -84,7 +84,7 @@ $options = [
       'name' => 'compose', 
       'graph' => 'twitter',
       'database' => 'janusgraph', 
-      'version' => '0.11'
+      'version' => '0.1.1'
     ],
 ....
 ];

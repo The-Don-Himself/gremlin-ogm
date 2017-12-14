@@ -23,6 +23,7 @@
   },
   "vendor": {
     "name": "compose",
-    "graph": "twitter"
+    "graph": "twitter",
+    "version": 0.1.1
   }
 }
