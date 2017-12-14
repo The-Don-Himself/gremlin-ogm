@@ -40,7 +40,8 @@ class PopulateCommand extends Command
             ->addArgument('handle', InputArgument::REQUIRED, 'The Twitter Handle to Populate')
             ->addOption('configPath', null, InputOption::VALUE_OPTIONAL, 'The Path to the JSON Configuration FIle')
             ->addOption('dryRun', null, InputOption::VALUE_OPTIONAL, 'Whether to execute the commands or not', false)
-            ->addOption('debugPath', null, InputOption::VALUE_OPTIONAL, 'The Path to dump all commands sent to Gremlin Server', null);
+            ->addOption('debugPath', null, InputOption::VALUE_OPTIONAL, 'The Path to dump all commands sent to Gremlin Server', null)
+            ->addOption('forceBindings', null, InputOption::VALUE_OPTIONAL, 'Whether force bindings when generating commands or not', 'undefined');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -49,7 +50,8 @@ class PopulateCommand extends Command
 
         $twitter_handle = $input->getArgument('handle');
         $configPath = $input->getOption('configPath');
-        $dryRun = (bool) $input->getOption('dryRun');
+        $dryRun = filter_var($input->getOption('dryRun'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        $forceBindings = filter_var($input->getOption('forceBindings'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
         $options = array();
         $twitter = array();
@@ -196,15 +198,15 @@ class PopulateCommand extends Command
 
         // Now, let's serialize them into actual gremlin commands
 
-        $use_bindings = true;
+        $use_bindings = (false === $forceBindings) ? false : true;
 
         if ($vendor) {
             $vendor_name = $vendor['name'];
             if ('compose' === $vendor_name) {
-                $use_bindings = false;
+                $use_bindings = (true === $forceBindings) ? true : false;
             }
             if ('azure' === $vendor_name) {
-                $use_bindings = false;
+                $use_bindings = (true === $forceBindings) ? true : false;
             }
         }
 
@@ -348,9 +350,7 @@ class PopulateCommand extends Command
                     $graph_connection->send($command);
                 }
             }, [&$graph_connection, $edge_commands]);
-        }
 
-        if (false === $dryRun) {
             $graph_connection->close();
         }
 

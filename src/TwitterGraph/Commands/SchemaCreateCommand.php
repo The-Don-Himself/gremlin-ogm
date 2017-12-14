@@ -33,6 +33,7 @@ class SchemaCreateCommand extends Command
         $commands = (new SchemaCreate())->create($schema);
 
         $configPath = $input->getOption('configPath');
+        $dryRun = filter_var($input->getOption('dryRun'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
         $options = array();
         $vendor = array();
@@ -44,18 +45,22 @@ class SchemaCreateCommand extends Command
             $vendor = $config['vendor'] ?? array();
         }
 
-        $graph = (new GraphConnection($options))->init();
-        $graph_connection = $graph->getConnection();
+        if (false === $dryRun) {
+            $graph = (new GraphConnection($options))->init();
+            $graph_connection = $graph->getConnection();
 
-        try {
-            $graph_connection->open();
-        } catch (InternalException $e) {
-            $output->writeln($e->getMessage());
+            try {
+                $graph_connection->open();
+            } catch (InternalException $e) {
+                $output->writeln($e->getMessage());
 
-            return;
+                return;
+            }
         }
 
         $output->writeln('Creating Schema...');
+
+        $vendor_commands = array();
 
         if ($vendor) {
             $vendor_name = $vendor['name'];
@@ -73,20 +78,35 @@ class SchemaCreateCommand extends Command
 
                 $command_string = 'ConfiguredGraphFactory.create("'.$graph_name.'"); def graph = ConfiguredGraphFactory.open("'.$graph_name.'"); def mgmt = graph.openManagement(); null;';
 
-                $graph_connection->send($command_string, 'session');
+                $vendor_commands[] = $command_string;
             }
         } else {
-            $graph_connection->send('mgmt = graph.openManagement(); null', 'session');
+            $command_string = 'mgmt = graph.openManagement(); null';
+            $vendor_commands[] = $command_string;
         }
 
-        $graph_connection->transaction(function (&$graph_connection, $commands) {
-            foreach ($commands as $command) {
+        if (false === $dryRun) {
+            foreach ($vendor_commands as $command) {
                 $graph_connection->send($command, 'session');
             }
-            $graph_connection->send('mgmt.commit()', 'session');
-        }, [&$graph_connection, $commands]);
 
-        $graph_connection->close();
+            $graph_connection->transaction(function (&$graph_connection, $commands) {
+                foreach ($commands as $command) {
+                    $graph_connection->send($command, 'session');
+                }
+                $graph_connection->send('mgmt.commit()', 'session');
+            }, [&$graph_connection, $commands]);
+
+            $graph_connection->close();
+        }
+
+        if (true === $dryRun) {
+            $all_commands = array_merge($vendor_commands, $commands, array('mgmt.commit()'));
+            $results = implode(PHP_EOL, $all_commands);
+            $debugPath = $input->getOption('debugPath') ?? null;
+            $dumpResultsPath = realpath($debugPath);
+            file_put_contents($dumpResultsPath.'/commands.txt', $results);
+        }
 
         $output->writeln('TwitterGraph Schema Created Successfully!');
     }
