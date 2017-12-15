@@ -438,46 +438,7 @@ php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremli
 
 example:
 
-C:\wamp64\www\gremlin-ogm>php bin/graph twittergraph:populate The_Don_Himself --configPath="\wamp64\www\gremlin-ogm\azure-cosmosdb.json"
-Twitter User @The_Don_Himself Found
-Twitter ID : 622225192
-Creating Vertexes...
-Done! 338 Vertexes Created
-Creating Edges...
-Done! 367 Edges Created
-Graph Populated Successfully!
-
-C:\wamp64\www\gremlin-ogm>
-
-
-**JanusGraph on Compose**
-
 ````
-php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremlin-ogm\janusgraph-compose.json"
-````
-
-example:
-
-C:\wamp64\www\gremlin-ogm>php bin/graph twittergraph:populate The_Don_Himself --configPath="\wamp64\www\gremlin-ogm\janusgraph-compose.json"
-Twitter User @The_Don_Himself Found
-Twitter ID : 622225192
-Creating Vertexes...
-Done! 338 Vertexes Created
-Creating Edges...
-Done! 367 Edges Created
-Graph Populated Successfully!
-
-C:\wamp64\www\gremlin-ogm>
-
-
-**JanusGraph Self-Hosted**
-
-````
-php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremlin-ogm\janusgraph.json"
-````
-
-example:
-
 C:\wamp64\www\gremlin-ogm>php bin/graph twittergraph:populate The_Don_Himself --configPath="\wamp64\www\gremlin-ogm\janusgraph.json"
 Twitter User @The_Don_Himself Found
 Twitter ID : 622225192
@@ -488,3 +449,48 @@ Done! 367 Edges Created
 Graph Populated Successfully!
 
 C:\wamp64\www\gremlin-ogm>
+````
+
+
+**JanusGraph on Compose**
+
+````
+php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremlin-ogm\janusgraph-compose.json"
+````
+
+example:
+
+````
+C:\wamp64\www\gremlin-ogm>php bin/graph twittergraph:populate The_Don_Himself --configPath="\wamp64\www\gremlin-ogm\janusgraph.json"
+Twitter User @The_Don_Himself Found
+Twitter ID : 622225192
+Creating Vertexes...
+Done! 338 Vertexes Created
+Creating Edges...
+Done! 367 Edges Created
+Graph Populated Successfully!
+
+C:\wamp64\www\gremlin-ogm>
+````
+
+
+**JanusGraph Self-Hosted**
+
+````
+php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremlin-ogm\janusgraph.json"
+````
+
+example:
+
+````
+C:\wamp64\www\gremlin-ogm>php bin/graph twittergraph:populate The_Don_Himself --configPath="\wamp64\www\gremlin-ogm\janusgraph.json"
+Twitter User @The_Don_Himself Found
+Twitter ID : 622225192
+Creating Vertexes...
+Done! 338 Vertexes Created
+Creating Edges...
+Done! 367 Edges Created
+Graph Populated Successfully!
+
+C:\wamp64\www\gremlin-ogm>
+````
