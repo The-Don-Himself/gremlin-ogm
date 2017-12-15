@@ -422,7 +422,7 @@ php bin/graph twittergraph:gremlin:traversal
 
 #### Tests
 
-Currently, I've not written any test suites but you can test the library by using a sample Twitter Graph that comes preconfigure with this library. Only the Graph Databases have been tested to work though
+Currently, I've not written any test suites but you can test the library by using a sample Twitter Graph that comes preconfigured with this library. Only the following Graph Databases have been tested to work though will test more when I get the time/resources
 
 - [x] Azure Cosmos DB
 - [x] JanusGraph on Compose
@@ -430,7 +430,7 @@ Currently, I've not written any test suites but you can test the library by usin
 
 Simple configure any of them in their respective json files in the root folder then execute the following
 
-Azure Cosmos DB
+**Azure Cosmos DB**
 
 ````
 php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremlin-ogm\azure-cosmosdb.json"
@@ -450,7 +450,7 @@ Graph Populated Successfully!
 C:\wamp64\www\gremlin-ogm>
 
 
-JanusGraph on Compose
+**JanusGraph on Compose**
 
 ````
 php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremlin-ogm\janusgraph-compose.json"
@@ -470,7 +470,7 @@ Graph Populated Successfully!
 C:\wamp64\www\gremlin-ogm>
 
 
-JanusGraph Self-Hosted
+**JanusGraph Self-Hosted**
 
 ````
 php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremlin-ogm\janusgraph.json"
