@@ -53,7 +53,6 @@ Again these are just proxies to the underlying brightzone/gremlin-php library, s
 
 - [x] Azure Cosmos DB
 - [ ] Datastax Enterprise Graph
-- [ ] IBM Graph
 - [x] JanusGraph on Compose
 - [x] JanusGraph Self-Hosted
 - [ ] Neo4j
