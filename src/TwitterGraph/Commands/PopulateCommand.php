@@ -336,7 +336,7 @@ class PopulateCommand extends Command
             // Azure CosmosDB doesn't play nice with our implementation of retryable transactions
             if ('azure' === $vendor_name) {
                 foreach ($vertex_commands as $command) {
-                  $graph_connection->send($command, 'session');
+                    $graph_connection->send($command, 'session');
                 }
             } else {
                 $graph_connection->transaction(function (&$graph_connection, $vertex_commands) {
@@ -355,7 +355,7 @@ class PopulateCommand extends Command
             // Azure CosmosDB doesn't play nice with our implementation of retryable transactions
             if ('azure' === $vendor_name) {
                 foreach ($vertex_commands as $command) {
-                  $graph_connection->send($command, 'session');
+                    $graph_connection->send($command, 'session');
                 }
             } else {
                 $graph_connection->transaction(function (&$graph_connection, $edge_commands) {
