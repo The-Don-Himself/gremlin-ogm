@@ -203,7 +203,7 @@ class PopulateCommand extends Command
         if ($vendor) {
             $vendor_name = $vendor['name'];
             if ('compose' === $vendor_name) {
-                $use_bindings = (true === $forceBindings) ? true : false;
+                $use_bindings = (false === $forceBindings) ? false : true;
             }
             if ('azure' === $vendor_name) {
                 $use_bindings = (true === $forceBindings) ? true : false;
@@ -301,10 +301,10 @@ class PopulateCommand extends Command
 
         if ($vendor) {
             $vendor_name = $vendor['name'];
-            $graph_name = $vendor['graph'];
+            $graph_name = $vendor['graph'] ?? null;
 
             if ('compose' === $vendor_name) {
-                $command_string = 'def graph = ConfiguredGraphFactory.open("'.$graph_name.'"); def g = graph.traversal(); null;';
+                $command_string = 'def graph = ConfiguredGraphFactory.open("'.$graph_name.'"); def g = graph.traversal(); null; ';
 
                 $vendor_commands[] = $command_string;
             }
@@ -333,11 +333,18 @@ class PopulateCommand extends Command
         $output->writeln('Creating Vertexes...');
 
         if (false === $dryRun) {
-            $graph_connection->transaction(function (&$graph_connection, $vertex_commands) {
+            // Azure CosmosDB doesn't play nice with our implementation of retryable transactions
+            if ('azure' === $vendor_name) {
                 foreach ($vertex_commands as $command) {
-                    $graph_connection->send($command);
+                  $graph_connection->send($command, 'session');
                 }
-            }, [&$graph_connection, $vertex_commands]);
+            } else {
+                $graph_connection->transaction(function (&$graph_connection, $vertex_commands) {
+                    foreach ($vertex_commands as $command) {
+                        $graph_connection->send($command, 'session');
+                    }
+                }, [&$graph_connection, $vertex_commands]);
+            }
         }
 
         $output->writeln('Done! '.count($vertex_commands).' Vertexes Created');
@@ -345,11 +352,18 @@ class PopulateCommand extends Command
         $output->writeln('Creating Edges...');
 
         if (false === $dryRun) {
-            $graph_connection->transaction(function (&$graph_connection, $edge_commands) {
-                foreach ($edge_commands as $command) {
-                    $graph_connection->send($command);
+            // Azure CosmosDB doesn't play nice with our implementation of retryable transactions
+            if ('azure' === $vendor_name) {
+                foreach ($vertex_commands as $command) {
+                  $graph_connection->send($command, 'session');
                 }
-            }, [&$graph_connection, $edge_commands]);
+            } else {
+                $graph_connection->transaction(function (&$graph_connection, $edge_commands) {
+                    foreach ($edge_commands as $command) {
+                        $graph_connection->send($command, 'session');
+                    }
+                }, [&$graph_connection, $edge_commands]);
+            }
 
             $graph_connection->close();
         }

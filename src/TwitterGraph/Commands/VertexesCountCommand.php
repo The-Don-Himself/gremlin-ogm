@@ -45,7 +45,7 @@ class VertexesCountCommand extends Command
 
         if ($vendor) {
             $vendor_name = $vendor['name'];
-            $graph_name = $vendor['graph'];
+            $graph_name = $vendor['graph'] ?? null;
 
             if ('compose' === $vendor_name) {
                 $gremlin_command = 'def graph = ConfiguredGraphFactory.open("'.$graph_name.'"); def g = graph.traversal(); '.$gremlin_command;

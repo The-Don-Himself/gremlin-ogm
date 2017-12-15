@@ -14,7 +14,7 @@ class UsersRepository extends GraphRepository
         $traversalBuilder = new TraversalBuilder();
 
         $command = $traversalBuilder
-          ->raw('b = new Bindings(); ')
+          ->raw('def b = new Bindings(); ')
           ->raw('user_id = '.$user_id.'; ')
 
           ->g()

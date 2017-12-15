@@ -24,11 +24,6 @@ class GremlinTraversalCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $repo = new \TheDonHimself\GremlinOGM\TwitterGraph\Repository\TweetsRepository();
-        $command = $repo->getTimelineForScreenName('the_don_himself');
-
-        return;
-
         $gremlin_command = $input->getArgument('traversal');
         $configPath = $input->getOption('configPath');
 
@@ -44,7 +39,7 @@ class GremlinTraversalCommand extends Command
 
         if ($vendor) {
             $vendor_name = $vendor['name'];
-            $graph_name = $vendor['graph'];
+            $graph_name = $vendor['graph'] ?? null;
 
             if ('compose' === $vendor_name) {
                 $gremlin_command = 'def graph = ConfiguredGraphFactory.open("'.$graph_name.'"); def g = graph.traversal(); '.$gremlin_command;

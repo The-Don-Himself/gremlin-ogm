@@ -50,6 +50,9 @@ class EdgesDropCommand extends Command
             if ('compose' === $vendor_name) {
                 $gremlin_command = 'def graph = ConfiguredGraphFactory.open("'.$graph_name.'"); def g = graph.traversal(); '.$gremlin_command;
             }
+            if ('azure' === $vendor_name) {
+                $gremlin_command = 'g.E().drop();';
+            }
         }
 
         $graph = (new GraphConnection($options))->init();

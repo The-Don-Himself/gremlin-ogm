@@ -355,7 +355,7 @@ EdgesCountCommand;
 EdgesDropCommand;
 GremlinTraversalCommand;
 
-SchemaCheckCommand runs some checks to ensure that you did not duplicate names of properties and labels or indexes while SchemaCreateCommand actually iterates through you graph classes and send gremlin commands to create them. PopulateCommand populates the graph with data either from an API as with the case of the sample TwitterGraph or from a databases if you use Doctrine ORM (RDBMS) and/or Doctrine ODM (MongoDB). GremlinTraversalCommand let you send a gremlin command through the CLI e.g php graph/console twittergraph:gremlin:traversal --traversal="g.V().count()".
+SchemaCheckCommand runs some checks to ensure that you did not duplicate names of properties and labels or indexes while SchemaCreateCommand actually iterates through you graph classes and send gremlin commands to create them. PopulateCommand populates the graph with data either from an API as with the case of the sample TwitterGraph or from a databases if you use Doctrine ORM (RDBMS) and/or Doctrine ODM (MongoDB). GremlinTraversalCommand let you send a gremlin command through the CLI e.g php bin/graph twittergraph:gremlin:traversal --traversal="g.V().count()".
 
 ##### Traverse The Graph
 
@@ -417,4 +417,74 @@ g.V().hasLabel('users').has('screen_name', 'my_username').union(out('tweeted'), 
 
 That's it for now, there is so much more that this simple library can do, please look in the sample TwitterGraph folder of quickly get started with a sample graph of your Twitter friends, followers, likes, tweets and retweets by running this command. The library comes with a preconfigured readonly Twitter App for this.
 
-php graph/console twittergraph:gremlin:traversal
+php bin/graph twittergraph:gremlin:traversal
+
+
+#### Tests
+
+Currently, I've not written any test suites but you can test the library by using a sample Twitter Graph that comes preconfigure with this library. Only the Graph Databases have been tested to work though
+
+- [x] Azure Cosmos DB
+- [x] JanusGraph on Compose
+- [x] JanusGraph Self-Hosted
+
+Simple configure any of them in their respective json files in the root folder then execute the following
+
+Azure Cosmos DB
+
+````
+php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremlin-ogm\azure-cosmosdb.json"
+````
+
+example:
+
+C:\wamp64\www\gremlin-ogm>php bin/graph twittergraph:populate The_Don_Himself --configPath="\wamp64\www\gremlin-ogm\azure-cosmosdb.json"
+Twitter User @The_Don_Himself Found
+Twitter ID : 622225192
+Creating Vertexes...
+Done! 338 Vertexes Created
+Creating Edges...
+Done! 367 Edges Created
+Graph Populated Successfully!
+
+C:\wamp64\www\gremlin-ogm>
+
+
+JanusGraph on Compose
+
+````
+php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremlin-ogm\janusgraph-compose.json"
+````
+
+example:
+
+C:\wamp64\www\gremlin-ogm>php bin/graph twittergraph:populate The_Don_Himself --configPath="\wamp64\www\gremlin-ogm\janusgraph-compose.json"
+Twitter User @The_Don_Himself Found
+Twitter ID : 622225192
+Creating Vertexes...
+Done! 338 Vertexes Created
+Creating Edges...
+Done! 367 Edges Created
+Graph Populated Successfully!
+
+C:\wamp64\www\gremlin-ogm>
+
+
+JanusGraph Self-Hosted
+
+````
+php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremlin-ogm\janusgraph.json"
+````
+
+example:
+
+C:\wamp64\www\gremlin-ogm>php bin/graph twittergraph:populate The_Don_Himself --configPath="\wamp64\www\gremlin-ogm\janusgraph.json"
+Twitter User @The_Don_Himself Found
+Twitter ID : 622225192
+Creating Vertexes...
+Done! 338 Vertexes Created
+Creating Edges...
+Done! 367 Edges Created
+Graph Populated Successfully!
+
+C:\wamp64\www\gremlin-ogm>

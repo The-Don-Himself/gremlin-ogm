@@ -160,7 +160,7 @@ class UsersSearch
         $traversalBuilder = new TraversalBuilder();
 
         $traversalBuilder
-          ->raw('b = new Bindings(); ');
+          ->raw('def b = new Bindings(); ');
 
         foreach ($bindings as $binding_key => $binding_value) {
             $traversalBuilder->raw($binding_key.' = '.$binding_value.'; ');

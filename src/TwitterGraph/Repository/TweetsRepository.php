@@ -14,7 +14,7 @@ class TweetsRepository extends GraphRepository
         $traversalBuilder = new TraversalBuilder();
 
         $command = $traversalBuilder
-          ->raw('b = new Bindings(); ')
+          ->raw('def b = new Bindings(); ')
           ->raw('tweet_id = '.$tweet_id.'; ')
 
           ->g()
@@ -31,7 +31,7 @@ class TweetsRepository extends GraphRepository
         $traversalBuilder = new TraversalBuilder();
 
         $command = $traversalBuilder
-          ->raw('b = new Bindings(); ')
+          ->raw('def b = new Bindings(); ')
           ->raw("screen_name = textRegex('(?i)' + '".$screen_name."'); ")
 
           ->g()
