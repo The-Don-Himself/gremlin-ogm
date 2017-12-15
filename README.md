@@ -420,7 +420,7 @@ That's it for now, there is so much more that this simple library can do, please
 php bin/graph twittergraph:gremlin:traversal
 
 
-#### Tests
+## Tests
 
 Currently, I've not written any test suites but you can test the library by using a sample Twitter Graph that comes preconfigured with this library. Only the following Graph Databases have been tested to work though will test more when I get the time/resources
 
