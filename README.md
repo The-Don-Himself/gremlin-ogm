@@ -432,6 +432,8 @@ Simple configure any of them in their respective json files in the root folder t
 
 **Azure Cosmos DB**
 
+Please Note: Schema create command not applicable for CosmosDB
+
 ````
 php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremlin-ogm\azure-cosmosdb.json"
 ````
@@ -455,6 +457,7 @@ C:\wamp64\www\gremlin-ogm>
 **JanusGraph on Compose**
 
 ````
+php bin/graph twittergraph:schema:create --configPath="\path\to\gremlin-ogm\janusgraph-compose.json"
 php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremlin-ogm\janusgraph-compose.json"
 ````
 
@@ -477,6 +480,7 @@ C:\wamp64\www\gremlin-ogm>
 **JanusGraph Self-Hosted**
 
 ````
+php bin/graph twittergraph:schema:create --configPath="\path\to\gremlin-ogm\janusgraph.json"
 php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremlin-ogm\janusgraph.json"
 ````
 
@@ -494,3 +498,8 @@ Graph Populated Successfully!
 
 C:\wamp64\www\gremlin-ogm>
 ````
+
+## GraphQL
+
+You might also be interested in [graphql2gremlin](https://github.com/The-Don-Himself/graphql2gremlin), an attempt to create a standard around transforming GraphQL queries to Gremlin Traversals.
+
