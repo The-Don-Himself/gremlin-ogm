@@ -513,6 +513,29 @@ class GraphSerializer
         return $command;
     }
 
+    public function updateVertex(array $key_value, array $array, $bindings = true)
+    {
+        $key_value_string = $this->toString($key_value);
+
+        $label = key($array);
+        $vertex_properties = current($array);
+
+        $propertyString = $this->toPropertyString($vertex_properties, $bindings);
+        if ($propertyString) {
+            $commandWithBindings = "def b = new Bindings(); g.V().hasLabel(b.of('replace_label', '$label')).has($key_value_string)$propertyString;";
+            $commandWithOutBindings = "g.V().hasLabel('$label').has($key_value_string)$propertyString;";
+
+            $command = $bindings ? $commandWithBindings : $commandWithOutBindings;
+        } else {
+            $commandWithBindings = "def b = new Bindings(); g.addV(b.of('add_label', '$label')).has($key_value_string);";
+            $commandWithOutBindings = "g.addV('$label').has($key_value_string);";
+
+            $command = $bindings ? $commandWithBindings : $commandWithOutBindings;
+        }
+
+        return $command;
+    }
+
     public function toEdge(string $edge_label, array $from_vertex, array $to_vertex, $object, $bindings = true)
     {
         $from_vertex_label = $from_vertex['label'];
