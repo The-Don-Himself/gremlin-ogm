@@ -51,6 +51,7 @@ Again these are just proxies to the underlying brightzone/gremlin-php library, s
 
 #### Current Tested Vendors:
 
+- [ ] Amazon Neptune
 - [x] Azure Cosmos DB
 - [ ] Datastax Enterprise Graph
 - [x] JanusGraph on Compose
