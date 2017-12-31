@@ -8,7 +8,7 @@ Check out the TwitterGraph folder for an elaborate example of how to use gremlin
 
 
 ## Usage
-Configure a Graph connection. This is simply a proxy to the underlying gremlin-server client for php aka brightzone/gremlin-php so you can check out the connection Class for configuration defaults and options Brightzone\GremlinDriver\Connection. For testing and development, I suggest something like the below
+Configure a Graph connection. This is simply a proxy to the underlying gremlin-server client for php aka [brightzone/gremlin-php](https://github.com/PommeVerte/gremlin-php) so you can check out the connection Class for configuration defaults and options Brightzone\GremlinDriver\Connection. For testing and development, I suggest something like the below
 
 ````
 $options = [
@@ -30,8 +30,13 @@ $options = [
 After configuring options, initiate a Graph connection
 
 ````
-$graph = (new \TheDonHimself\GremlinOGM\GraphConnection($options))->init();
+use TheDonHimself\GremlinOGM\GraphConnection;
+
+....
+
+$graph = (new GraphConnection($options))->init();
 $graph_connection = $graph->getConnection();
+
 ````
 
 At this point you can open a connection to the Graph database and send gremlin-queries to it as shown.
@@ -49,7 +54,7 @@ $graph_connection->close();
 
 Again these are just proxies to the underlying brightzone/gremlin-php library, so what does gremlin-ogm do? Gremlin-OGM helps you map PHP objects to Graph Vertexes, Edges, Properties and Indexes. It also provides a way to validate that mapping and point out areas where the schema fails. Moreover, the library attempts to create a cross-vendor abstraction layer because different providers might give different ways to execute gremlin commands. 
 
-#### Current Tested Vendors:
+#### Current Tested & Supported Vendors:
 
 - [ ] Amazon Neptune
 - [x] Azure Cosmos DB
@@ -59,7 +64,7 @@ Again these are just proxies to the underlying brightzone/gremlin-php library, s
 - [ ] Neo4j
 - [ ] OrientDB
 
-To tell the of a specific vendor extend the options array as shown for self-hosted
+To tell the library of a specific vendor extend the options array as shown for self-hosted
 
 ````
 $options = [
@@ -113,7 +118,9 @@ On to the fun now.
 
 #### Create A Schema
 
-First we deal with vertexes (a few places I called them vertices, but I'll update everywhere to be vertexes and indexes)
+Note: Not all gremlin compatible databases support schemas, in the event you are using one just skip this part.
+
+First we deal with vertexes (a few places I called them vertices, similar to indices and indexes)
 
 ##### Vertexes
 
@@ -336,7 +343,7 @@ class Follows
 }
 ````
 
-The beauty of this library is that it only helps you write gremlin commands but does not stop you from interfacing with Gremlin directly, for example as in the case of the Follows Edge above, the library will produce gremlin commands to create an edge between two vertexes if you can pass to it a unique identifier such as user_id, house_id, taxi_id, etc. If you want to added an edge by other ways you can simply write a gremlin command and submit it directly.
+The beauty of this library is that it only helps you write gremlin commands but does not stop you from interfacing with Gremlin directly, for example as in the case of the Follows Edge above, the library will produce gremlin commands to create an edge between two vertexes if you can pass to it a unique identifier such as user_id, house_id, taxi_id, etc. If you want to added an edge by other ways you can simply write a gremlin command and submit it directly through $graph_connection->send(' my awesome gremlin command ;');
 
 The follows edges class is really simple, in that it simply creates an edge linking two vertexes by user_id, in real life examples you'd probably create the edge but have added properties like followed_on, via_app, introduced_by and so on. Just add those properties to the class and let the library serialize them for you.
 
@@ -362,6 +369,9 @@ SchemaCheckCommand runs some checks to ensure that you did not duplicate names o
 The library is almost a seamless transition from the Gremlin API. The most important thing here is the TraversalBuilder from \TheDonHimself\Traversal\TraversalBuilder which returns ready to execute gremlin commands, for example to get back a users vertex from Twitter you can build a Traversal as follows
 
 ````
+use TheDonHimself\Traversal\TraversalBuilder;
+....
+
 $user_id = 12345;
 
 $traversalBuilder = new TraversalBuilder();
@@ -381,6 +391,35 @@ Take special note of the single and double quotes
 Echoing this command will show you this
 ````
 g.V().hasLabel('users').has('users_id', 12345)
+````
+
+If you want to use bindings in the case of script parameterization (highly recommended) you can do this.
+
+
+````
+use TheDonHimself\Traversal\TraversalBuilder;
+....
+
+$user_id = 12345;
+
+$traversalBuilder = new TraversalBuilder();
+
+$command = $traversalBuilder
+  ->raw('def b = new Bindings(); ');
+  ->g()
+  ->V()
+  ->hasLabel("'users'")
+  ->has("'users_id'", "b.of('user_id', $user_id)")
+  ->getTraversal();
+
+return $command;
+````
+
+Again please take special note of the single and double quotes
+
+Echoing this command will show you this
+````
+def b = new Bindings(); g.V().hasLabel('users').has('users_id', b.of('user_id', 12345))
 ````
 
 Re: check possible traversal steps in at the code from \TheDonHimself\Traversal\Step,
@@ -415,9 +454,7 @@ Echoing this command will show you this
 g.V().hasLabel('users').has('screen_name', 'my_username').union(out('tweeted'), out('follows').out('tweeted')).order().by('created_at', decr).limit(10)
 ````
 
-That's it for now, there is so much more that this simple library can do, please look in the sample TwitterGraph folder of quickly get started with a sample graph of your Twitter friends, followers, likes, tweets and retweets by running this command. The library comes with a preconfigured readonly Twitter App for this.
-
-php bin/graph twittergraph:gremlin:traversal
+That's it for now, there is so much more that this simple library can do, please look in the sample TwitterGraph folder to quickly get started with a sample graph of your Twitter friends, followers, likes, tweets and retweets by running this command. The library comes with a preconfigured readonly Twitter App for this.
 
 
 ## Tests
@@ -428,20 +465,39 @@ Currently, I've not written any test suites but you can test the library by usin
 - [x] JanusGraph on Compose
 - [x] JanusGraph Self-Hosted
 
-Simple configure any of them in their respective json files in the root folder then execute the following
+Simple configure any of them in their respective yaml files in the root folder then execute the following
+
+````
+php bin/graph twittergraph:schema:create
+````
+
+then 
+
+````
+php bin/graph twittergraph:populate
+````
 
 **Azure Cosmos DB**
 
 Please Note: Schema create command not applicable for CosmosDB
 
-````
-php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremlin-ogm\azure-cosmosdb.json"
-````
-
 example:
 
 ````
-C:\wamp64\www\gremlin-ogm>php bin/graph twittergraph:populate The_Don_Himself --configPath="\wamp64\www\gremlin-ogm\janusgraph.json"
+C:\wamp64\www\gremlin-ogm>php bin/graph twittergraph:populate
+
+Populate the Twitter Graph with Data
+====================================
+
+ Enter the path to a yaml configuration file or use defaults (JanusGraph, 127.0.0.1:8182 with ssl, no username or password):
+ > \wamp64\www\gremlin-ogm\azure-cosmosdb.yaml
+
+ The Twitter Username to Populate:
+ > The_Don_Himself
+
+ Perform a Dry Run [false]:
+ >
+
 Twitter User @The_Don_Himself Found
 Twitter ID : 622225192
 Creating Vertexes...
@@ -456,15 +512,23 @@ C:\wamp64\www\gremlin-ogm>
 
 **JanusGraph on Compose**
 
-````
-php bin/graph twittergraph:schema:create --configPath="\path\to\gremlin-ogm\janusgraph-compose.json"
-php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremlin-ogm\janusgraph-compose.json"
-````
-
 example:
 
 ````
-C:\wamp64\www\gremlin-ogm>php bin/graph twittergraph:populate The_Don_Himself --configPath="\wamp64\www\gremlin-ogm\janusgraph.json"
+C:\wamp64\www\gremlin-ogm>php bin/graph twittergraph:populate
+
+Populate the Twitter Graph with Data
+====================================
+
+ Enter the path to a yaml configuration file or use defaults (JanusGraph, 127.0.0.1:8182 with ssl, no username or password):
+ > \wamp64\www\gremlin-ogm\janusgraph-compose.yaml
+
+ The Twitter Username to Populate:
+ > The_Don_Himself
+
+ Perform a Dry Run [false]:
+ >
+
 Twitter User @The_Don_Himself Found
 Twitter ID : 622225192
 Creating Vertexes...
@@ -479,15 +543,23 @@ C:\wamp64\www\gremlin-ogm>
 
 **JanusGraph Self-Hosted**
 
-````
-php bin/graph twittergraph:schema:create --configPath="\path\to\gremlin-ogm\janusgraph.json"
-php bin/graph twittergraph:populate twitter_handle --configPath="\path\to\gremlin-ogm\janusgraph.json"
-````
-
 example:
 
 ````
-C:\wamp64\www\gremlin-ogm>php bin/graph twittergraph:populate The_Don_Himself --configPath="\wamp64\www\gremlin-ogm\janusgraph.json"
+C:\wamp64\www\gremlin-ogm>php bin/graph twittergraph:populate
+
+Populate the Twitter Graph with Data
+====================================
+
+ Enter the path to a yaml configuration file or use defaults (JanusGraph, 127.0.0.1:8182 with ssl, no username or password):
+ > \wamp64\www\gremlin-ogm\janusgraph.yaml
+
+ The Twitter Username to Populate:
+ > The_Don_Himself
+
+ Perform a Dry Run [false]:
+ >
+
 Twitter User @The_Don_Himself Found
 Twitter ID : 622225192
 Creating Vertexes...

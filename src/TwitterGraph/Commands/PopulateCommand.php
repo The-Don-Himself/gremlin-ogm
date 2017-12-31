@@ -48,7 +48,7 @@ class PopulateCommand extends Command
         AnnotationRegistry::registerLoader('class_exists');
 
         $io = new SymfonyStyle($input, $output);
-        $io->title('Drop Edges in the Graph');
+        $io->title('Populate the Twitter Graph with Data');
 
         $configPath = $io->ask('Enter the path to a yaml configuration file or use defaults (JanusGraph, 127.0.0.1:8182 with ssl, no username or password)', null, function ($input_path) {
             return $input_path;
