@@ -6,7 +6,6 @@ use Brightzone\GremlinDriver\InternalException;
 use Brightzone\GremlinDriver\ServerException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TheDonHimself\GremlinOGM\GraphConnection;
 
@@ -16,23 +15,30 @@ class EdgesCountCommand extends Command
     {
         $this
             ->setName('twittergraph:edges:count')
-            ->setDescription('Count Number Of Edges in TwitterGraph')
-            ->addOption('configPath', null, InputOption::VALUE_OPTIONAL, 'The Path to the JSON Configuration FIle')
-            ->addOption('label', null, InputOption::VALUE_OPTIONAL, 'The Edge label to be counted');
+            ->setDescription('Count Number Of Edges in TwitterGraph');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $configPath = $input->getOption('configPath');
+        $io = new SymfonyStyle($input, $output);
+        $io->title('Count Edges in the Graph');
 
-        $options = array();
+        $configPath = $io->ask('Enter the path to a yaml configuration file or use defaults (JanusGraph, 127.0.0.1:8182 with ssl, no username or password)', null, function ($input_path) {
+            return $input_path;
+        });
+
+        $label = $io->ask('Enter an optional edge label to count or leave blank to count all edge', null, function ($input_label) {
+            return $input_label;
+        });
+
+        $options = GraphConnection::DEFAULT_OPTIONS;
+
         $vendor = array();
 
         if ($configPath) {
-            $configFile = file_get_contents($configPath);
-            $config = json_decode($configFile, true);
+            $config = Yaml::parseFile($configPath);
             $options = $config['options'];
-            $vendor = isset($config['vendor']) ? $config['vendor'] : array();
+            $vendor = $config['vendor'] ?? array();
         }
 
         $label = $input->getOption('label');

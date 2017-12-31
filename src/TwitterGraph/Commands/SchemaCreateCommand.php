@@ -3,10 +3,13 @@
 namespace TheDonHimself\GremlinOGM\TwitterGraph\Graph\Commands;
 
 use Brightzone\GremlinDriver\InternalException;
+use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Yaml\Yaml;
 use TheDonHimself\GremlinOGM\GraphConnection;
 use TheDonHimself\GremlinOGM\Tools\BuildClassMaps;
 use TheDonHimself\GremlinOGM\Tools\SchemaCheck;
@@ -19,31 +22,42 @@ class SchemaCreateCommand extends Command
         $this
             ->setName('twittergraph:schema:create')
             ->setDescription('TwitterGraph Schema Create')
-            ->addOption('configPath', null, InputOption::VALUE_OPTIONAL, 'The Path to the JSON Configuration FIle')
-            ->addOption('dryRun', null, InputOption::VALUE_OPTIONAL, 'Whether to execute the commands or not', false)
             ->addOption('debugPath', null, InputOption::VALUE_OPTIONAL, 'The Path to dump all commands sent to Gremlin Server', null);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $io = new SymfonyStyle($input, $output);
+        $io->title('Create Graph Schema Command');
+
+        $configPath = $io->ask('Enter the path to a yaml configuration file or use defaults (JanusGraph, 127.0.0.1:8182 with ssl, no username or password)', null, function ($input_path) {
+            return $input_path;
+        });
+
+        $dryRun = $io->ask('Perform a Dry Run', 'false', function ($input_dry_run) {
+            $input_boolean = filter_var($input_dry_run, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            if (null === $input_boolean) {
+                throw new RuntimeException('You typed an invalid boolean.');
+            }
+
+            return $input_boolean;
+        });
+
+        $options = GraphConnection::DEFAULT_OPTIONS;
+
+        $vendor = array();
+
+        if ($configPath) {
+            $config = Yaml::parseFile($configPath);
+            $options = $config['options'];
+            $vendor = $config['vendor'] ?? array();
+        }
+
         $twitterGraphPath = dirname(dirname(__FILE__));
 
         $class_maps = (new BuildClassMaps())->build($twitterGraphPath);
         $schema = (new SchemaCheck())->check($class_maps);
         $commands = (new SchemaCreate())->create($schema);
-
-        $configPath = $input->getOption('configPath');
-        $dryRun = filter_var($input->getOption('dryRun'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-
-        $options = array();
-        $vendor = array();
-
-        if ($configPath) {
-            $configFile = file_get_contents($configPath);
-            $config = json_decode($configFile, true);
-            $options = $config['options'];
-            $vendor = $config['vendor'] ?? array();
-        }
 
         if (false === $dryRun) {
             $graph = (new GraphConnection($options))->init();
@@ -106,6 +120,7 @@ class SchemaCreateCommand extends Command
             $debugPath = $input->getOption('debugPath') ?? null;
             $dumpResultsPath = realpath($debugPath);
             file_put_contents($dumpResultsPath.'/commands.txt', $results);
+            $output->writeln('Commands Dumped in file : '.$dumpResultsPath.'/commands.txt');
         }
 
         $output->writeln('TwitterGraph Schema Created Successfully!');

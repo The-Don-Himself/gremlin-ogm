@@ -4,11 +4,12 @@ namespace TheDonHimself\GremlinOGM\TwitterGraph\Graph\Commands;
 
 use Brightzone\GremlinDriver\InternalException;
 use Brightzone\GremlinDriver\ServerException;
+use RuntimeException;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Yaml\Yaml;
 use TheDonHimself\GremlinOGM\GraphConnection;
 
 class GremlinTraversalCommand extends Command
@@ -17,24 +18,34 @@ class GremlinTraversalCommand extends Command
     {
         $this
             ->setName('twittergraph:gremlin:traversal')
-            ->setDescription('TwitterGraph Gremlin Traversal Command')
-            ->addArgument('traversal', InputArgument::REQUIRED, 'The Gremlin Traversal to Send')
-            ->addOption('configPath', null, InputOption::VALUE_OPTIONAL, 'The Path to the JSON Configuration FIle');
+            ->setDescription('TwitterGraph Gremlin Traversal Command');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $gremlin_command = $input->getArgument('traversal');
-        $configPath = $input->getOption('configPath');
+        $io = new SymfonyStyle($input, $output);
+        $io->title('Send A Gremlin Command');
 
-        $options = array();
+        $configPath = $io->ask('Enter the path to a yaml configuration file or use defaults (JanusGraph, localhost:8182 with ssl, no username or password)', null, function ($input_path) {
+            return $input_path;
+        });
+
+        $gremlin_command = $io->ask('Enter the gremlin traversal', null, function ($input_command) {
+            if (null === $input_command) {
+                throw new RuntimeException('You need to type a command.');
+            }
+
+            return $input_command;
+        });
+
+        $options = GraphConnection::DEFAULT_OPTIONS;
+
         $vendor = array();
 
         if ($configPath) {
-            $configFile = file_get_contents($configPath);
-            $config = json_decode($configFile, true);
+            $config = Yaml::parseFile($configPath);
             $options = $config['options'];
-            $vendor = isset($config['vendor']) ? $config['vendor'] : array();
+            $vendor = $config['vendor'] ?? array();
         }
 
         if ($vendor) {
@@ -60,7 +71,10 @@ class GremlinTraversalCommand extends Command
         $output->writeln('Sending Command...');
 
         try {
+            $command_start_time = microtime(true);
             $resultSet = $graph_connection->send($gremlin_command);
+            $command_finish_time = microtime(true);
+            $command_time = $command_finish_time - $command_start_time;
         } catch (ServerException $e) {
             $output->writeln($e->getMessage());
 
@@ -70,5 +84,7 @@ class GremlinTraversalCommand extends Command
         $graph_connection->close();
 
         $output->writeln(print_r($resultSet));
+
+        $output->writeln('Command Took Appoximately : '.$command_time);
     }
 }

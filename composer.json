@@ -10,8 +10,9 @@
         "guzzlehttp/psr7": "^1.4.2",
         "doctrine/common": "^2.8",
         "jms/serializer": "^1.9",
-        "symfony/class-loader": "^3.3",
-        "symfony/console": "^3.3"
+        "symfony/class-loader": "~4.0 || ~3.0 || ~2.7",
+        "symfony/console": "~4.0 || ~3.0 || ~2.7",
+        "symfony/yaml": "~4.0 || ~3.0 || ~2.7"
     },
     "license": "MIT",
     "authors": [
@@ -22,8 +23,13 @@
     ],
     "keywords": [
         "graph",
-        "janusgraph",
-        "gremlin",
+        "Amazon Neptune",
+        "Azure Cosmos DB",
+        "Datastax Enterprise Graph",
+        "JanusGraph",
+        "Neo4j",
+        "Neo4j",
+        "OrientDB",
         "gremlin-php",
         "gremlin-ogm"
     ],

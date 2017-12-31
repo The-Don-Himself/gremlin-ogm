@@ -6,11 +6,13 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 use Brightzone\GremlinDriver\InternalException;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use JMS\Serializer\SerializerBuilder;
+use RuntimeException;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Yaml\Yaml;
 use TheDonHimself\GremlinOGM\GraphConnection;
 use TheDonHimself\GremlinOGM\Serializer\GraphSerializer;
 use TheDonHimself\GremlinOGM\Tools\BuildClassMaps;
@@ -37,9 +39,6 @@ class PopulateCommand extends Command
         $this
             ->setName('twittergraph:populate')
             ->setDescription('TwitterGraph Populate')
-            ->addArgument('handle', InputArgument::REQUIRED, 'The Twitter Handle to Populate')
-            ->addOption('configPath', null, InputOption::VALUE_OPTIONAL, 'The Path to the JSON Configuration FIle')
-            ->addOption('dryRun', null, InputOption::VALUE_OPTIONAL, 'Whether to execute the commands or not', false)
             ->addOption('debugPath', null, InputOption::VALUE_OPTIONAL, 'The Path to dump all commands sent to Gremlin Server', null)
             ->addOption('forceBindings', null, InputOption::VALUE_OPTIONAL, 'Whether force bindings when generating commands or not', 'undefined');
     }
@@ -48,22 +47,43 @@ class PopulateCommand extends Command
     {
         AnnotationRegistry::registerLoader('class_exists');
 
-        $twitter_handle = $input->getArgument('handle');
-        $configPath = $input->getOption('configPath');
-        $dryRun = filter_var($input->getOption('dryRun'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-        $forceBindings = filter_var($input->getOption('forceBindings'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        $io = new SymfonyStyle($input, $output);
+        $io->title('Drop Edges in the Graph');
 
-        $options = array();
-        $twitter = array();
+        $configPath = $io->ask('Enter the path to a yaml configuration file or use defaults (JanusGraph, 127.0.0.1:8182 with ssl, no username or password)', null, function ($input_path) {
+            return $input_path;
+        });
+
+        $options = GraphConnection::DEFAULT_OPTIONS;
+
         $vendor = array();
+        $twitter = array();
 
         if ($configPath) {
-            $configFile = file_get_contents($configPath);
-            $config = json_decode($configFile, true);
+            $config = Yaml::parseFile($configPath);
             $options = $config['options'];
             $twitter = $config['twitter'];
             $vendor = $config['vendor'] ?? array();
         }
+
+        $twitter_handle = $io->ask('The Twitter Username to Populate', null, function ($input_twitter_handle) {
+            if (null === $input_twitter_handle) {
+                throw new RuntimeException('You need to type a Twitter handle.');
+            }
+
+            return $input_twitter_handle;
+        });
+
+        $dryRun = $io->ask('Perform a Dry Run', 'false', function ($input_dry_run) {
+            $input_boolean = filter_var($input_dry_run, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            if (null === $input_boolean) {
+                throw new RuntimeException('You typed an invalid boolean.');
+            }
+
+            return $input_boolean;
+        });
+
+        $forceBindings = filter_var($input->getOption('forceBindings'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
         // Twitter Credentials Defaults
         $consumer_key = 'LnUQzlkWlNT4oNUh7a2rwFtwe';

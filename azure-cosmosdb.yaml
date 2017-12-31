@@ -1,0 +1,21 @@
+options:
+    host: mygraph.graphs.azure.com
+    port: 443
+    username: /dbs/my_db/colls/my_graph
+    password: password
+    ssl:
+        ssl:
+            verify_peer: false
+            verify_peer_name: false
+    graph: graph
+    timeout: 10
+    emptySet: true
+    retryAttempts: 3
+twitter:
+    consumer_key: LnUQzlkWlNT4oNUh7a2rwFtwe
+    consumer_secret: WCIu0YhaOUBPq11lj8psxZYobCjXpYXHxXA6rVcqbuNDYXEoP0
+    access_token: 622225192-upvfXMpeb9a3FMhuid6oBiCRsiAokpNFgbVeeRxl
+    access_token_secret: 9M5MnJOns2AFeZbdTeSk3R81ZVjltJCXKtxUav1MgsN7Z
+vendor:
+    name: azure
+    database: cosmosdb

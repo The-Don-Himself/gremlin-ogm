@@ -12,11 +12,11 @@ Configure a Graph connection. This is simply a proxy to the underlying gremlin-s
 
 ````
 $options = [
-    'host' => 127.0.0.1, 
+    'host' => '127.0.0.1', 
     'port' => 8182, 
     'username' => null, 
     'password' => null, 
-    'ssl' = [ 
+    'ssl' => [ 
       'ssl_verify_peer' => false, 
       'ssl_verify_peer_name' => false
     ],

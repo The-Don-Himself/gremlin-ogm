@@ -6,8 +6,9 @@ use Brightzone\GremlinDriver\InternalException;
 use Brightzone\GremlinDriver\ServerException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Yaml\Yaml;
 use TheDonHimself\GremlinOGM\GraphConnection;
 
 class EdgesDropCommand extends Command
@@ -16,23 +17,30 @@ class EdgesDropCommand extends Command
     {
         $this
             ->setName('twittergraph:edges:drop')
-            ->setDescription('TwitterGraph Drop Edges')
-            ->addOption('configPath', null, InputOption::VALUE_OPTIONAL, 'The Path to the JSON Configuration FIle')
-            ->addOption('label', null, InputOption::VALUE_OPTIONAL, 'The Edge label to be deleted');
+            ->setDescription('TwitterGraph Drop Edges');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $configPath = $input->getOption('configPath');
+        $io = new SymfonyStyle($input, $output);
+        $io->title('Drop Edges in the Graph');
 
-        $options = array();
+        $configPath = $io->ask('Enter the path to a yaml configuration file or use defaults (JanusGraph, 127.0.0.1:8182 with ssl, no username or password)', null, function ($input_path) {
+            return $input_path;
+        });
+
+        $label = $io->ask('Enter an optional edge label to drop or leave blank to drop all edges', null, function ($input_label) {
+            return $input_label;
+        });
+
+        $options = GraphConnection::DEFAULT_OPTIONS;
+
         $vendor = array();
 
         if ($configPath) {
-            $configFile = file_get_contents($configPath);
-            $config = json_decode($configFile, true);
+            $config = Yaml::parseFile($configPath);
             $options = $config['options'];
-            $vendor = isset($config['vendor']) ? $config['vendor'] : array();
+            $vendor = $config['vendor'] ?? array();
         }
 
         $label = $input->getOption('label');

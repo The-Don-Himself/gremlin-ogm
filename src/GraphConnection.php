@@ -6,6 +6,21 @@ use Brightzone\GremlinDriver\Connection;
 
 class GraphConnection
 {
+    const DEFAULT_OPTIONS = array(
+        'host' => '127.0.0.1',
+        'port' => 8182,
+        'username' => null,
+        'password' => null,
+        'ssl' => array(
+          'ssl_verify_peer' => false,
+          'ssl_verify_peer_name' => false,
+        ),
+        'graph' => 'graph',
+        'timeout' => 10,
+        'emptySet' => true,
+        'retryAttempts' => 3,
+    );
+
     /**
      * @var \Brightzone\GremlinDriver\Connection
      */
@@ -35,7 +50,7 @@ class GraphConnection
             $options['emptySet'] = true;
         }
         if (!isset($options['timeout'])) {
-            $options['timeout'] = 5;
+            $options['timeout'] = 10;
         }
 
         if (isset($options['twitter'])) {
