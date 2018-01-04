@@ -4,9 +4,6 @@ A PHP Object Graph Mapper for Tinkerpop 3+ compatible Graph Databases (JanusGrap
 Check out the TwitterGraph folder for an elaborate example of how to use gremlin-ogm to graph Twitter in a Graph Database.
 
 
-##### Note: Still a work in progress. I'm progressively open sourcing the code I use in production with JanusGraph. Currently, only a small percentage is my own stuff while the rest using code from the dev-master branch. Once I can run 100% off this library, I will release the first stable version 0.0.1. If you use Symfony, then there's a bundle I'm working on that will allow you to map Doctrine ORM entities from a compatible RDBMS database as well as Doctrine ODM documents from MongoDB to a Graph Database.
-
-
 ## Usage
 Configure a Graph connection. This is simply a proxy to the underlying gremlin-server client for php aka [brightzone/gremlin-php](https://github.com/PommeVerte/gremlin-php) so you can check out the connection Class for configuration defaults and options Brightzone\GremlinDriver\Connection. For testing and development, I suggest something like the below
 
@@ -574,4 +571,3 @@ C:\wamp64\www\gremlin-ogm>
 ## GraphQL
 
 You might also be interested in [graphql2gremlin](https://github.com/The-Don-Himself/graphql2gremlin), an attempt to create a standard around transforming GraphQL queries to Gremlin Traversals.
-
