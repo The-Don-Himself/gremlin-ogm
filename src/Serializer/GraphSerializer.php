@@ -623,6 +623,24 @@ class GraphSerializer
         return $command;
     }
 
+    public function updateEdge(array $key_value, array $array, $bindings = true)
+    {
+        $key_value_string = $this->toString($key_value);
+
+        $label = key($array);
+        $edge_properties = current($array);
+
+        $propertyString = $this->toPropertyString($edge_properties, $bindings);
+        if ($propertyString) {
+            $commandWithBindings = "def b = new Bindings(); g.E().hasLabel(b.of('replace_label', '$label')).has($key_value_string)$propertyString;";
+            $commandWithOutBindings = "g.E().hasLabel('$label').has($key_value_string)$propertyString;";
+
+            $command = $bindings ? $commandWithBindings : $commandWithOutBindings;
+        }
+
+        return $command;
+    }
+
     public function toAddEdge(string $edge_label, array $from_vertex, array $to_vertex, $object, $bindings = true, $checkFirst = true)
     {
         $from_vertex_label = $from_vertex['label'];
