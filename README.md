@@ -68,7 +68,7 @@ To tell the library of a specific vendor extend the options array as shown for s
 ````
 $options = [
 ....
-    'vendor' = [ 
+    'vendor' => [ 
       'name' => '_self', 
       'database' => 'janusgraph', 
       'version' => '0.2'
@@ -84,7 +84,7 @@ An example configuration for JanusGraph on Compose would look like this.
 ````
 $options = [
 ....
-    'vendor' = [ 
+    'vendor' => [ 
       'name' => 'compose', 
       'graph' => 'twitter',
       'database' => 'janusgraph', 
@@ -99,7 +99,7 @@ An example configuration for CosmosDB on Azure would look like this.
 ````
 $options = [
 ....
-    'vendor' = [ 
+    'vendor' => [ 
       'name' => 'azure', 
       'database' => 'cosmosdb'
     ],
