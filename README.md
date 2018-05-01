@@ -13,9 +13,11 @@ $options = [
     'port' => 8182, 
     'username' => null, 
     'password' => null, 
-    'ssl' => [ 
-      'ssl_verify_peer' => false, 
-      'ssl_verify_peer_name' => false
+    'ssl' => [
+      'ssl' => [
+        'verify_peer' => false,
+        'verify_peer_name' => false
+      ]
     ],
     'graph' => 'graph', 
     'timeout' => 10, 

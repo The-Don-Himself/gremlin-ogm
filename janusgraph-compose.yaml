@@ -1,5 +1,5 @@
 options:
-    host: portal.janusgraph.my-app.composedb.com
+    host: portal-ssl.janusgraph.my-app.composedb.com
     port: 12345
     username: admin
     password: password
