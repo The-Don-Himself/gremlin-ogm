@@ -368,7 +368,7 @@ SchemaCheckCommand runs some checks to ensure that you did not duplicate names o
 The library is almost a seamless transition from the Gremlin API. The most important thing here is the TraversalBuilder from \TheDonHimself\Traversal\TraversalBuilder which returns ready to execute gremlin commands, for example to get back a users vertex from Twitter you can build a Traversal as follows
 
 ````
-use TheDonHimself\Traversal\TraversalBuilder;
+use TheDonHimself\GremlinOGM\Traversal\TraversalBuilder;
 ....
 
 $user_id = 12345;
@@ -396,7 +396,7 @@ If you want to use bindings in the case of script parameterization (highly recom
 
 
 ````
-use TheDonHimself\Traversal\TraversalBuilder;
+use TheDonHimself\GremlinOGM\Traversal\TraversalBuilder;
 ....
 
 $user_id = 12345;
