@@ -6,6 +6,7 @@ use TheDonHimself\GremlinOGM\Traversal\Step\AddEdgeStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\AddEStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\AddPropertyStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\AddVertexStep;
+use TheDonHimself\GremlinOGM\Traversal\Step\AddVStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\AggregateStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\AndStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\AsStep;
@@ -248,7 +249,7 @@ class TraversalBuilder
     {
         $traversal = $this->traversal;
 
-        $addV = new AddVertexStep($args);
+        $addV = new AddVStep($args);
         $addV_traversal = $addV->__toString();
 
         $new_traversal = $traversal.$addV_traversal;
