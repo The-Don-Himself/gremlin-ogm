@@ -28,6 +28,7 @@ use TheDonHimself\GremlinOGM\Traversal\Step\GraphStep\EStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\GraphStep\VStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\GroupCountStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\GroupStep;
+use TheDonHimself\GremlinOGM\Traversal\Step\HasIdStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\HasKeyStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\HasLabelStep;
 use TheDonHimself\GremlinOGM\Traversal\Step\HasNotStep;
@@ -746,7 +747,7 @@ class TraversalBuilder
     {
         $traversal = $this->traversal;
 
-        $hasId = new HasLabelStep($args);
+        $hasId = new HasIdStep($args);
         $hasId_traversal = $hasId->__toString();
 
         $new_traversal = $traversal.$hasId_traversal;
