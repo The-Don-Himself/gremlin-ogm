@@ -404,7 +404,7 @@ $user_id = 12345;
 $traversalBuilder = new TraversalBuilder();
 
 $command = $traversalBuilder
-  ->raw('def b = new Bindings(); ');
+  ->raw('def b = new Bindings(); ')
   ->g()
   ->V()
   ->hasLabel("'users'")
