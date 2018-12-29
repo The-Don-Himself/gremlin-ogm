@@ -12,8 +12,10 @@ class GraphConnection
         'username' => null,
         'password' => null,
         'ssl' => array(
-          'ssl_verify_peer' => false,
-          'ssl_verify_peer_name' => false,
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+            ),
         ),
         'graph' => 'graph',
         'timeout' => 10,
