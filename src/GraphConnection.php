@@ -74,7 +74,6 @@ class GraphConnection
         $options = $this->options;
 
         $db = new Connection($options);
-        $db->message->registerSerializer('\Brightzone\GremlinDriver\Serializers\Gson3', true);
 
         $this->connection = $db;
 
