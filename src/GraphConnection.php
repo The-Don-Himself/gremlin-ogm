@@ -33,6 +33,7 @@ class GraphConnection
 
     /**
      * @var array contains the twitter app credentials for sample Twitter Graph
+	 * https://github.com/The-Don-Himself/twitter-graph
      */
     private $twitter = [];
 

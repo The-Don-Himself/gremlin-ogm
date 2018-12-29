@@ -2,7 +2,7 @@
 
 namespace TheDonHimself\GremlinOGM\Tools;
 
-use Symfony\Component\ClassLoader\ClassMapGenerator;
+use ClassMapGenerator;
 
 class BuildClassMaps
 {

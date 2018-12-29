@@ -3,16 +3,10 @@
     "description": "A PHP Object Graph Mapper for Tinkerpop 3+ compatible Graph Databases (JanusGraph, Neo4j, etc.) that allows you to persist data and run gremlin queries.",
     "type": "library",
     "require": {
-        "php": ">=7.0",
-        "abraham/twitteroauth": "^0.7.2",
+        "php": "^7.0",
         "brightzone/gremlin-php": "^3.0",
-        "guzzlehttp/guzzle": "^6.3",
-        "guzzlehttp/psr7": "^1.4.2",
         "doctrine/common": "^2.8",
-        "jms/serializer": "^1.9",
-        "symfony/class-loader": "~4.0 || ~3.0 || ~2.7",
-        "symfony/console": "~4.0 || ~3.0 || ~2.7",
-        "symfony/yaml": "~4.0 || ~3.0 || ~2.7"
+        "jms/serializer": "^2.0 || ^1.9"
     },
     "license": "MIT",
     "authors": [
@@ -38,6 +32,5 @@
             "TheDonHimself\\GremlinOGM\\": "src/"
         }
     },
-    "minimum-stability": "stable",
-    "bin": ["bin/graph", "bin/graph.php"]
+    "minimum-stability": "stable"
 }
