@@ -16,7 +16,7 @@ class SchemaCreate
             $type = $properties['type'];
             $cardinality = $properties['cardinality'];
 
-            $property_keys_commands[] = "$property_key = mgmt.makePropertyKey('$property_key').dataType(".$type.'.class).cardinality(Cardinality.'.$cardinality.').make();';
+            $property_keys_commands[] = "$property_key = mgmt.makePropertyKey('$property_key').dataType(".$type.'.class).cardinality(org.janusgraph.core.Cardinality.'.$cardinality.').make();';
         }
 
         $vertexes_commands = array();
