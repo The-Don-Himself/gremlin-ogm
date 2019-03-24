@@ -2,7 +2,7 @@
 
 namespace TheDonHimself\GremlinOGM\Tools;
 
-use ClassMapGenerator;
+use TheDonHimself\GremlinOGM\Tools\ClassMapGenerator;
 
 class BuildClassMaps
 {
