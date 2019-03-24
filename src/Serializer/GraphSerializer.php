@@ -31,7 +31,7 @@ class GraphSerializer
         return $array;
     }
 
-    public function toString(array $array, $bindings = true)
+    public function toString(array $array, $bindings = false)
     {
         $string_array = array();
 
@@ -190,7 +190,7 @@ class GraphSerializer
         return $string;
     }
 
-    public function toPropertyString(array $array, $bindings = true)
+    public function toPropertyString(array $array, $bindings = false)
     {
         $string_array = array();
 
@@ -343,7 +343,7 @@ class GraphSerializer
         return $string;
     }
 
-    public function toCollection(array $array, $bindings = true)
+    public function toCollection(array $array, $bindings = false)
     {
         $string_array = array();
 
@@ -492,7 +492,7 @@ class GraphSerializer
         return $string;
     }
 
-    public function toVertex(array $array, $bindings = true)
+    public function toVertex(array $array, $bindings = false)
     {
         $label = key($array);
         $vertex_properties = current($array);
@@ -513,7 +513,7 @@ class GraphSerializer
         return $command;
     }
 
-    public function updateVertex(array $key_value, array $array, $bindings = true)
+    public function updateVertex(array $key_value, array $array, $bindings = false)
     {
         $key_value_string = $this->toString($key_value);
 
@@ -536,7 +536,7 @@ class GraphSerializer
         return $command;
     }
 
-    public function toEdge(string $edge_label, array $from_vertex, array $to_vertex, $object, $bindings = true, $checkFirst = true)
+    public function toEdge(string $edge_label, array $from_vertex, array $to_vertex, $object, $bindings = false, $checkFirst = true)
     {
         $from_vertex_label = $from_vertex['label'];
         $from_vertex_key = $from_vertex['uniquePropertyKey'];
@@ -623,7 +623,7 @@ class GraphSerializer
         return $command;
     }
 
-    public function updateEdge(array $key_value, array $array, $bindings = true)
+    public function updateEdge(array $key_value, array $array, $bindings = false)
     {
         $key_value_string = $this->toString($key_value);
 
@@ -641,7 +641,7 @@ class GraphSerializer
         return $command;
     }
 
-    public function toAddEdge(string $edge_label, array $from_vertex, array $to_vertex, $object, $bindings = true, $checkFirst = true)
+    public function toAddEdge(string $edge_label, array $from_vertex, array $to_vertex, $object, $bindings = false, $checkFirst = true)
     {
         $from_vertex_label = $from_vertex['label'];
         $from_vertex_key = $from_vertex['uniquePropertyKey'];

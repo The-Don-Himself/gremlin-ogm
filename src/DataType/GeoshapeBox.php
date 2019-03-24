@@ -5,10 +5,6 @@ namespace TheDonHimself\GremlinOGM\DataType;
 class GeoshapeBox
 {
     public $_geoshapebox = array();
-    private $sw_lat;
-    private $sw_lon;
-    private $ne_lat;
-    private $ne_lon;
 
     /**
      * @param float $sw_lat
@@ -18,10 +14,6 @@ class GeoshapeBox
      */
     public function __construct($sw_lat, $sw_lon, $ne_lat, $ne_lon)
     {
-        $this->sw_lat = $sw_lat;
-        $this->sw_lon = $sw_lon;
-        $this->ne_lat = $ne_lat;
-        $this->ne_lon = $ne_lon;
         $this->_geoshapebox = array(
             'sw_lat' => $sw_lat,
             'sw_lon' => $sw_lon,
@@ -35,7 +27,7 @@ class GeoshapeBox
      */
     public function getSwLat()
     {
-        return $this->sw_lat;
+        return $this->_geoshapebox['sw_lat'];
     }
 
     /**
@@ -43,7 +35,7 @@ class GeoshapeBox
      */
     public function getSwLon()
     {
-        return $this->sw_lon;
+        return $this->_geoshapebox['sw_lon'];
     }
 
     /**
@@ -51,7 +43,7 @@ class GeoshapeBox
      */
     public function getNeLat()
     {
-        return $this->ne_lat;
+        return $this->_geoshapebox['ne_lat'];
     }
 
     /**
@@ -59,6 +51,7 @@ class GeoshapeBox
      */
     public function getNeLon()
     {
-        return $this->ne_lon;
+        return $this->_geoshapebox['ne_lon'];
     }
+
 }

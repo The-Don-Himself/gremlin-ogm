@@ -5,8 +5,6 @@ namespace TheDonHimself\GremlinOGM\DataType;
 class GeoshapePoint
 {
     public $_geoshapepoint = array();
-    private $lat;
-    private $lon;
 
     /**
      * @param float $lat
@@ -14,8 +12,6 @@ class GeoshapePoint
      */
     public function __construct($lat, $lon)
     {
-        $this->lat = $lat;
-        $this->lon = $lon;
         $this->_geoshapepoint = array(
             'lat' => $lat,
             'lon' => $lon,
@@ -27,7 +23,7 @@ class GeoshapePoint
      */
     public function getLat()
     {
-        return $this->lat;
+        return $this->_geoshapepoint['lat'];
     }
 
     /**
@@ -35,6 +31,6 @@ class GeoshapePoint
      */
     public function getLon()
     {
-        return $this->lon;
+        return $this->_geoshapepoint['lon'];
     }
 }

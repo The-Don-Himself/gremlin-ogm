@@ -5,9 +5,6 @@ namespace TheDonHimself\GremlinOGM\DataType;
 class GeoshapeCircle
 {
     public $_geoshapecircle = array();
-    private $lat;
-    private $lon;
-    private $radius;
 
     /**
      * @param float $lat
@@ -16,9 +13,6 @@ class GeoshapeCircle
      */
     public function __construct($lat, $lon, $radius)
     {
-        $this->lat = $lat;
-        $this->lon = $lon;
-        $this->radius = $radius;
         $this->_geoshapecircle = array(
             'lat' => $lat,
             'lon' => $lon,
@@ -31,7 +25,7 @@ class GeoshapeCircle
      */
     public function getLat()
     {
-        return $this->lat;
+        return $this->_geoshapecircle['lat'];
     }
 
     /**
@@ -39,7 +33,7 @@ class GeoshapeCircle
      */
     public function getLon()
     {
-        return $this->lon;
+        return $this->_geoshapecircle['lon'];
     }
 
     /**
@@ -47,6 +41,6 @@ class GeoshapeCircle
      */
     public function getRadius()
     {
-        return $this->radius;
+        return $this->_geoshapecircle['radius'];
     }
 }
